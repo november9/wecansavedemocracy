@@ -1,0 +1,48 @@
+body {
+  padding: 35px;
+}
+
+form a {
+  margin-left: 5px;
+}
+
+.categories,
+.delete-btn {
+  display: inline-block;
+  float: right;
+}
+
+.loading-causes {
+  text-align: center;
+  margin-top: 200px;
+}
+
+.loading-actions  {
+  text-align: center !important;
+}
+
+.activity-details-link {
+  text-decoration: underline;
+  cursor: pointer;
+  font-style: italic;
+}
+
+.activity-details-link:hover {
+  text-decoration: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ccc inset;
+}
+
+/* REPRESENTATIVE PAGE */
+.official-address {
+  border: 1px #ccc;
+  border-width: 0 0 1px;
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+
+.official-address:last-child {
+  border: none;
+}
