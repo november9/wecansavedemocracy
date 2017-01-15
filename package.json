@@ -28,10 +28,12 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-preset-stage-1": "^6.1.18",
+    "css-loader": "^0.26.1",
     "lodash": "^4.17.2",
     "material-design-icons": "^3.0.1",
     "material-ui": "^0.16.5",
     "moment": "^2.17.1",
+    "react-big-calendar": "^0.12.3",
     "react-dom": "^15.4.1",
     "react-moment": "^0.1.2",
     "react-redux": "^4.0.0",
@@ -40,6 +42,7 @@
     "redux": "^3.0.4",
     "redux-form": "^6.4.2",
     "redux-form-material-ui": "^4.1.2",
-    "redux-promise": "^0.5.3"
+    "redux-promise": "^0.5.3",
+    "style-loader": "^0.13.1"
   }
 }
