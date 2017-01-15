@@ -6,8 +6,6 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch(action.type) {
-  case FIND_REP:
-    return {...state, representativeData: action.payload.data};
   default:
     return state;
   }

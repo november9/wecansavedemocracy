@@ -99,20 +99,20 @@ class FindRep extends Component {
   }
 
   onRowSelection(rows) {
-    switch (rows) {
-      case 'all':
-        tempSelectedOfficials = this.state.representativeData.officials;
-        break;
-      case 'none':
-        tempSelectedOfficials = [];
-      default:
-        this.state.representativeData.officials.forEach((official, i) => {
-          official.selected = rows.indexOf(i) > -1;
-          if (official.selected === true) {
-            tempSelectedOfficials.push(official);
-          }
-        });
-    }
+  switch (rows) {
+    case 'all':
+      tempSelectedOfficials = this.state.representativeData.officials;
+      break;
+    case 'none':
+      tempSelectedOfficials = [];
+    default:
+      this.state.representativeData.officials.forEach((official, i) => {
+        official.selected = rows.indexOf(i) > -1;
+        if (official.selected === true) {
+          tempSelectedOfficials.push(official);
+        }
+      });
+  }
 
     this.setState({selectedOfficials: tempSelectedOfficials});
   }
@@ -215,6 +215,8 @@ class FindRep extends Component {
 
   renderOfficials(officialsData) {
     return officialsData.officials.map((data, key) => {
+      officialsData.officials['tempIdx'] = key;
+
       if (data) {
         if (!data.party) {
           data.party = '(none given)';
@@ -294,29 +296,6 @@ class FindRep extends Component {
     }
   }
 
-  submitSelectedRepList() {
-    let selectedRepList = [];
-
-    this.state.selectedOfficials.map((official, key) => {
-      selectedRepList.push({
-        officialName: official.name,
-        officialTitle: this.renderOfficialTitle(this.state.representativeData, key),
-        officialAddresses: this.renderOfficialAddresses(official.address),
-        officialPhones: this.renderOfficialPhoneNumbers(official.phones),
-        officialParty: official.party,
-        officialUrls: this.renderUrls(official.urls),
-        officialChannels: this.renderChannels(official.channels)
-      });
-    });
-
-    const tempActivityData = this.props.tempActivityData;
-    const activityDataWithReps = _.merge({}, tempActivityData, {
-      selectedReps: selectedRepList
-    });
-
-    this.props.addUserActivity(activityDataWithReps)
-  }
-
   // TODO: There is probably a much better way of doing this,
   // don't think I'm using Redux optimally here
   onSubmit(props) {
@@ -326,6 +305,12 @@ class FindRep extends Component {
     }, () => {
       return this.state.tempData.payload
       .then((response) => {
+        // adding a unique index to each official in the list for deduping purposes
+        // later on 
+        _.forEach(response.data.officials, (val, key) => {
+          response.data.officials[key]['tempIdx'] = key;
+        });
+
         this.setState({
           representativeData: response.data,
           isLoadingRepData: false
@@ -338,6 +323,35 @@ class FindRep extends Component {
         });
       });
     })
+  }
+
+  submitSelectedRepList() {
+    let selectedRepList = [];
+
+    // need to dedup here because each click of the checkbox to add
+    // a rep seems to be firing multiple times, adding the rep multiple times
+    const dedupedRepList = _.uniqBy(this.state.selectedOfficials, 'tempIdx');
+
+    dedupedRepList.map((official, key) => {
+      selectedRepList.push({
+        officialName: official.name,
+        officialTitle: this.renderOfficialTitle(this.state.representativeData, key),
+        officialAddresses: this.renderOfficialAddresses(official.address),
+        officialPhones: this.renderOfficialPhoneNumbers(official.phones),
+        officialParty: official.party,
+        officialUrls: this.renderUrls(official.urls),
+        officialChannels: this.renderChannels(official.channels)
+      });
+    });
+
+    const tempActivityData = this.props.tempActivityData;
+
+    // here we update the selected activity data with this new rep list
+    const activityDataWithReps = _.merge({}, tempActivityData, {
+      selectedReps: selectedRepList
+    });
+
+    this.props.addUserActivity(activityDataWithReps)
   }
 
   render() {
