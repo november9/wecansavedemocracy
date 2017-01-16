@@ -3,8 +3,6 @@ import { TimePicker } from 'material-ui';
 import Moment from 'react-moment';
 import _ from 'lodash';
 import addLeadingZeros from '../../utils/addLeadingZeros';
-import { updateUserActivity } from '../../actions/index';
-import { connect } from 'react-redux';
 
 class TimeSelect extends Component {
   constructor(props) {
@@ -18,6 +16,14 @@ class TimeSelect extends Component {
       timePlaceholder: '(any time)',
       timePickerHint: 'select time',
       startTime: null,
+    }
+  }
+
+  addLeadingZeros (num) {
+    if (num < 9) {
+      return '0' + num;
+    } else {
+      return num;
     }
   }
 
@@ -62,9 +68,16 @@ class TimeSelect extends Component {
         // if we've already gotten the start time from the time picker,
         // then convert that time to the same format we're getting from the API
         if (this.state.startTime !== null) {
+          // break new time down into pieces to correspond with activity object from API
+          const hours = this.state.startTime.getHours();
+          const convertedHours = ((hours + 11) % 12 + 1);
+          const minutes = this.state.startTime.getMinutes();
+          const amPm = hours >= 12 ? 'PM':'AM';
 
-          // update the global state with the new start time value
-          this.props.updateUserActivity(this.state.activities[this.state.indexOfSelectedRow], this.state.startTime, 'startTime')
+          // update the user activity with the newly selected start time
+          this.props.activities[this.state.indexOfSelectedRow].acf.start_hour = convertedHours;
+          this.props.activities[this.state.indexOfSelectedRow].acf.start_minute = addLeadingZeros(minutes);
+          this.props.activities[this.state.indexOfSelectedRow].acf.start_am_pm = amPm;
 
           return (
             <span>
@@ -92,5 +105,4 @@ class TimeSelect extends Component {
   }
 }
 
-//export default TimeSelect;
-export default connect(null, { updateUserActivity })(TimeSelect);
+export default TimeSelect;

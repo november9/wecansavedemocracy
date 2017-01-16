@@ -61,6 +61,7 @@ export function lookForReps(selectedActivity) {
 }
 
 export function updateUserActivity(userActivity, newVal, valIdentifier) {
+  console.log('updateUserActivity is firing!');
   let unformattedDate;
   let finalDate;
   let finalTime;

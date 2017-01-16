@@ -102,9 +102,8 @@ class ActivitiesList extends Component {
       this.setState({
         indexOfEditedRow: null
       }, () => {
-        sortByDate(this.props.activities);
         // ...then copy the latest from the global state into the local state
-        this.setState({activities: _.sortBy(this.props.activities, 'acf.date')});
+        this.setState({activities: sortByDate(this.props.activities)});
       });
     }
   }
@@ -122,40 +121,12 @@ class ActivitiesList extends Component {
   }
 
   renderActivities(idx) {
-    _.forEach(this.state.activities, (val) => {
-      // here is where we add the millisecond value for sorting by date
-      if (!val.hasOwnProperty('timeInMilliseconds') ||
-        val.timeInMilliseconds === '' ||
-        val.timeInMilliseconds === undefined) {
-        val.timeInMilliseconds = 0;
-      }
-    });
-
-    //console.log('this.state.activities', this.state.activities);
-
-    //let sortedActivities = _.sortBy(this.state.activities, 'timeInMilliseconds');
-    //console.log('sortedActivities', sortedActivities);
-
     return this.state.activities.map((activity, key) => {
       if (!activity.hasOwnProperty('isInEditMode')) {
         _.merge(activity, {
           isInEditMode: false,
         });
       }
-
-      // here is where we add the millisecond value for sorting by date
-      // if (!activity.hasOwnProperty('timeInMilliseconds') || activity.timeInMilliseconds === '' || !activity.timeInMilliseconds) {
-      //   _.merge(activity, {
-      //     timeInMilliseconds: 0,
-      //   });
-      // }
-
-      console.log('activity.timeInMilliseconds', activity.timeInMilliseconds);
-      console.log('activity.title.rendered', activity.title.rendered);
-      var m = moment(activity.timeInMilliseconds);
-      var s = m.format("M/D/YYYY H:mm");
-      console.log('Date', s);
-      console.log('*****************')
 
       return (
         <TableRow key={key}>
