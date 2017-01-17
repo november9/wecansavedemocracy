@@ -14,9 +14,8 @@ import DateSelect from './DateSelect/dateSelect';
 import TimeSelect from './TimeSelect/timeSelect';
 import TimeCommitmentSelect from './TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
-import addLeadingZeros from '../utils/addLeadingZeros';
-import sortByDate from '../utils/sortByDate';
 import moment from 'moment';
+import { fetchUserActivities } from '../actions/index';
 
 
 const tableCellProps = {
@@ -102,8 +101,9 @@ class ActivitiesList extends Component {
       this.setState({
         indexOfEditedRow: null
       }, () => {
+        this.props.fetchUserActivities();
         // ...then copy the latest from the global state into the local state
-        this.setState({activities: sortByDate(this.props.activities)});
+        this.setState({ activities: this.props.activities });
       });
     }
   }
@@ -249,4 +249,4 @@ function mapStateToProps(state) {
   }
 }
 // a shortcut to avoid mapDispatchToProps()
-export default connect(mapStateToProps, {})(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities })(ActivitiesList);

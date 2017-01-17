@@ -1,8 +1,8 @@
 import moment from 'moment';
 import addLeadingZeros from '../utils/addLeadingZeros';
 
-const sortByDate = (list) => {
 
+const sortByDate = (list) => {
 
   if (_.isArray(list)) {
     let unformattedDate;
@@ -18,8 +18,6 @@ const sortByDate = (list) => {
     let convertedDateTime;
     let convertedByMoment;
     let convertedToMilliseconds;
-
-
 
     unsortedList = _.forEach(list, (val, key) => {
       // convert date
@@ -59,13 +57,9 @@ const sortByDate = (list) => {
       convertedToMilliseconds = moment(convertedByMoment).valueOf();
 
       val.timeInMilliseconds = convertedToMilliseconds;
-      console.log('val.timeInMilliseconds', val.timeInMilliseconds);
-      console.log('convertedDateTime', convertedDateTime);
-
     });
 
     return _.sortBy(unsortedList, 'timeInMilliseconds');
-
   } else {
     return [];
   }
