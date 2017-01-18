@@ -30,11 +30,7 @@ export default function (state = INITIAL_STATE, action) {
     browserHistory.push('/');
     return state;
   case FETCH_USER_ACTIVITIES:
-    console.log('FETCH_USER_ACTIVITIES');
-    tempActivityList = state.all;
-    state.all = [];
-    state.all = sortByDate(tempActivityList);
-    tempActivityList = [];
+    state.all = action.payload;
     return state;
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;

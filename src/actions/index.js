@@ -1,6 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import addLeadingZeros from '../utils/addLeadingZeros';
+import sortByDate from '../utils/sortByDate';
 import moment from 'moment';
 
 export const FETCH_ACTIVITIES = 'FETCH_ACTIVITIES';
@@ -60,10 +61,13 @@ export function lookForReps(selectedActivity) {
   }
 }
 
-export function fetchUserActivities () {
+export function fetchUserActivities (userActivities) {
+  const request = sortByDate(userActivities);
+  //console.log('request', request);
+
   return {
     type: FETCH_USER_ACTIVITIES,
-    payload: null,
+    payload: request,
   }
 }
 

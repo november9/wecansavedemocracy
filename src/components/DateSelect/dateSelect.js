@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { DatePicker } from 'material-ui';
 import Moment from 'react-moment';
+import { fetchUserActivities } from '../../actions/index';
+import moment from 'moment';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 
 class DateSelect extends Component {
   constructor(props) {
@@ -48,10 +51,15 @@ class DateSelect extends Component {
           startDate = this.state.startDate;
         }
 
+
+
         // save the new value to the global state
-        this.props.activities[this.state.indexOfSelectedRow].acf.date = startDate;
+        this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(startDate).format('YYYYMMDD');
         // console.log('startDate', startDate);
         // _.sortBy(this.props.activities, this.state.startDate.getTime())
+
+        console.log('here is the this.props.activities[this.state.indexOfSelectedRow].acf.date date from the dateSelect', this.props.activities[this.state.indexOfSelectedRow].acf.date);
+        this.props.fetchUserActivities(this.props.activities);
 
         return (
           <span>
@@ -75,4 +83,10 @@ class DateSelect extends Component {
   }
 }
 
-export default DateSelect;
+function mapStateToProps(state) {
+  return {
+    activities: state.userActivities.all
+  }
+}
+// a shortcut to avoid mapDispatchToProps()
+export default connect(mapStateToProps, { fetchUserActivities })(DateSelect);

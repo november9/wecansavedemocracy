@@ -99,11 +99,8 @@ class ActivitiesList extends Component {
     } else {
       // first make input fields go away...
       this.setState({
-        indexOfEditedRow: null
-      }, () => {
-        this.props.fetchUserActivities();
-        // ...then copy the latest from the global state into the local state
-        this.setState({ activities: this.props.activities });
+        indexOfEditedRow: null,
+        activities: this.props.activities
       });
     }
   }

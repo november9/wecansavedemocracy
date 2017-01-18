@@ -26,8 +26,11 @@ const sortByDate = (list) => {
         unformattedDate = val.acf.date;
         finalDate = moment(unformattedDate).format('YYYY-MM-DD');
       } else {
+        console.log('no date info, just giving the date today');
         finalDate = dateToday;
       }
+
+
 
       // convert time
       if (_.has(val, 'acf.start_hour') && _.has(val, 'acf.start_am_pm')) {
@@ -58,6 +61,8 @@ const sortByDate = (list) => {
 
       val.timeInMilliseconds = convertedToMilliseconds;
     });
+
+    console.log("_.sortBy(unsortedList, 'timeInMilliseconds')", _.sortBy(unsortedList, 'timeInMilliseconds'));
 
     return _.sortBy(unsortedList, 'timeInMilliseconds');
   } else {
