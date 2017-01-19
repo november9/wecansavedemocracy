@@ -8,7 +8,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
-import {CircularProgress, GridList, GridTile, Card, CardTitle, CardText, Checkbox, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui';
+import {CircularProgress, GridList, GridTile, Card, CardTitle, CardText, Checkbox, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, RaisedButton} from 'material-ui';
 import { connect } from 'react-redux';
 import { fetchCauses, fetchActivities, fetchActivity } from '../actions/index';
 import { Link } from 'react-router';
@@ -32,11 +32,18 @@ const styles = {
     width: '50%'
   },
   checkBoxSection: {
-    marginBottom: '35px'
+    marginBottom: '20px'
   },
   checkBoxContainers: {
     paddingBottom: '40px !important'
-  }
+  },
+  activitySearchBtn: {
+    marginBottom: '20px'
+  },
+  activitySearchBtnLabel: {
+    fontSize: '25px',
+    fontWeight: 'bold'
+  },
 }
 
 class ActivitiesNew extends Component {
@@ -58,8 +65,12 @@ class ActivitiesNew extends Component {
       deselectOnClickaway: false,
       showCheckboxes: false,
       bodyStyle: styles,
-      checkboxSectionTitle: 'Select Causes to Take Action On'
+      checkboxSectionTitle: 'Select Causes to Take Action On',
+      searchForActivities: 'Find Actions to Take',
     }
+
+    this.handleCheck = this.handleCheck.bind(this);
+    this.searchForActivities = this.searchForActivities.bind(this);
   }
 
   componentWillMount() {
@@ -90,20 +101,21 @@ class ActivitiesNew extends Component {
     });
   }
 
-  // TODO: This should be handled via a submit button and not trigger a new
-  // query for checkboxes every time something is checked, wonky experience
-  // and makes too much demand on the server
   handleCheck(id) {
     let found = this.state.activeCheckboxes.includes(id)
     if (found) {
       this.setState({
         activeCheckboxes: this.state.activeCheckboxes.filter(x => x !== id)
-      }, () => this.fetchActivitiesFromCauses(this.state.activeCheckboxes));
+      });
     } else {
       this.setState({
         activeCheckboxes: [ ...this.state.activeCheckboxes, id ]
-      }, () => this.fetchActivitiesFromCauses(this.state.activeCheckboxes));
+      });
     }
+  }
+
+  searchForActivities() {
+    this.fetchActivitiesFromCauses(this.state.activeCheckboxes);
   }
 
   renderCauseCheckboxes() {
@@ -168,6 +180,16 @@ class ActivitiesNew extends Component {
             </GridList>
           </CardText>
         </Card>
+
+        <RaisedButton
+          disabled={this.state.activeCheckboxes.length < 1}
+          label={this.state.searchForActivities}
+          secondary={true}
+          onTouchTap={this.searchForActivities}
+          style={this.state.bodyStyle.activitySearchBtn}
+          labelStyle={this.state.bodyStyle.activitySearchBtnLabel}
+
+        />
 
         <Table
           style={this.state.bodyStyle.table}

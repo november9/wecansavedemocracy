@@ -21,16 +21,12 @@ const sortByDate = (list) => {
 
     unsortedList = _.forEach(list, (val, key) => {
       // convert date
-      if (_.has(val, 'acf.date')) {
-
+      if (_.has(val, 'acf.date' && val.acf.date.length === 8)) {
         unformattedDate = val.acf.date;
         finalDate = moment(unformattedDate).format('YYYY-MM-DD');
       } else {
-        console.log('no date info, just giving the date today');
         finalDate = dateToday;
       }
-
-
 
       // convert time
       if (_.has(val, 'acf.start_hour') && _.has(val, 'acf.start_am_pm')) {
@@ -38,7 +34,7 @@ const sortByDate = (list) => {
 
         unformattedTime = val.acf.start_hour + ':' + startTimeMins;
 
-        if (val.acf.start_am_pm.toLowerCase() === 'pm') {
+        if (val.acf.start_am_pm && val.acf.start_am_pm.toLowerCase() === 'pm') {
           if (val.acf.start_hour === 12) {
             militaryHours = 0;
           } else {
