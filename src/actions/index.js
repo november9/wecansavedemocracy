@@ -6,7 +6,7 @@ import moment from 'moment';
 
 export const FETCH_ACTIVITIES = 'FETCH_ACTIVITIES';
 export const FETCH_ACTIVITY = 'FETCH_ACTIVITY';
-export const DELETE_ACTIVITY = 'DELETE_ACTIVITY';
+export const DELETE_USER_ACTIVITIES = 'DELETE_USER_ACTIVITIES';
 export const FETCH_CAUSES = 'FETCH_CAUSES';
 export const FETCH_ACTIVITIES_FROM_CAUSES = 'FETCH_ACTIVITIES_FROM_CAUSES';
 export const FETCH_USER_ACTIVITIES = 'FETCH_USER_ACTIVITIES';
@@ -62,12 +62,9 @@ export function lookForReps(selectedActivity) {
 }
 
 export function fetchUserActivities (userActivities) {
-  const request = sortByDate(userActivities);
-  //console.log('request', request);
-
   return {
     type: FETCH_USER_ACTIVITIES,
-    payload: request,
+    payload: userActivities
   }
 }
 
@@ -80,11 +77,10 @@ export function findReps(address) {
   }
 }
 
-export function deleteActivity(id) {
-  const request = axios.delete(`${ROOT_URL}/actions/${id}${API_KEY}`);
-
+export function deleteUserActivities(deletedActivities) {
+  console.log('deletedActivities from actions', deletedActivities);
   return {
-    type: DELETE_ACTIVITY,
-    payload: request
+    type: DELETE_USER_ACTIVITIES,
+    payload: deletedActivities
   }
 }

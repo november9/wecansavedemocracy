@@ -55,7 +55,6 @@ class DateSelect extends Component {
 
         // save the new value to the global state
         this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(startDate).format('YYYYMMDD');
-        this.props.fetchUserActivities(this.props.activities);
 
         return (
           <span>

@@ -1,4 +1,4 @@
-import { ADD_USER_ACTIVITY, LOOK_FOR_REPS, SUBMIT_ACTIVITY_WITH_REPS, FETCH_USER_ACTIVITIES } from '../actions/index';
+import { ADD_USER_ACTIVITY, LOOK_FOR_REPS, SUBMIT_ACTIVITY_WITH_REPS, FETCH_USER_ACTIVITIES, DELETE_USER_ACTIVITIES } from '../actions/index';
 import sortByDate from '../utils/sortByDate';
 import { browserHistory } from 'react-router';
 
@@ -11,14 +11,7 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
-
-  // function sortAndAddToState () {
-  //   let tempActivityList = state.all;
-  //   state.all = [];
-  //   state.all = sortByDate(tempActivityList);
-  //   tempActivityList = [];
-  // }
-
+  console.log('action.type', action.type);
   switch(action.type) {
   case ADD_USER_ACTIVITY:
     state.all.push(action.payload);
@@ -30,11 +23,18 @@ export default function (state = INITIAL_STATE, action) {
     browserHistory.push('/');
     return state;
   case FETCH_USER_ACTIVITIES:
-    state.all = action.payload;
+    state.all = sortByDate(action.payload);
+    console.log('state.all', state.all);
     return state;
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;
     browserHistory.push('/find-representative');
+    return state;
+  case DELETE_USER_ACTIVITIES:
+    console.log('action.payload', action.payload);
+    state.all = _.filter(action.payload, (val, key) => {
+      return val.selected !== true;
+    });
     return state;
   default:
     return state;

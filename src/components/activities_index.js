@@ -15,7 +15,7 @@ import TimeSelect from './TimeSelect/timeSelect';
 import TimeCommitmentSelect from './TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
-import { fetchUserActivities } from '../actions/index';
+import { fetchUserActivities, deleteUserActivities } from '../actions/index';
 
 const tableCellProps = {
   whiteSpace: 'inherit',
@@ -64,8 +64,6 @@ const styles = {
   }
 }
 
-let selectedActivities = [];
-
 class ActivitiesList extends Component {
   constructor(props) {
     super(props);
@@ -101,6 +99,8 @@ class ActivitiesList extends Component {
   }
 
   handleRowSelection(rows) {
+    let selectedActivities = [];
+    console.log('rows', rows);
     switch (rows) {
     case 'all':
       selectedActivities = this.state.activities;
@@ -128,9 +128,14 @@ class ActivitiesList extends Component {
       });
     } else {
       // first make input fields go away...
+      this.props.fetchUserActivities(this.state.activities);
       this.setState({
         indexOfEditedRow: null,
-        activities: this.props.activities
+        activities: this.state.activities,
+      }, () => {
+        this.setState({
+          selectedActivities: []
+        })
       });
     }
   }
@@ -147,7 +152,16 @@ class ActivitiesList extends Component {
     }
   }
 
+  deleteActivities(selectedActivities) {
+    let selectedActivitiesTemp = selectedActivities;
+    this.props.deleteUserActivities(selectedActivitiesTemp);
+    this.setState({
+      activities: selectedActivitiesTemp
+    }, this.handleRowSelection('none'))
+  }
+
   renderActivities(idx) {
+    console.log('RE-RENDERING!!', this.state.activities)
     return this.state.activities.map((activity, key) => {
       if (!activity.hasOwnProperty('isInEditMode')) {
         _.merge(activity, {
@@ -215,8 +229,13 @@ class ActivitiesList extends Component {
               label={this.state.deleteActionsBtn}
               default={true}
               labelStyle={this.state.bodyStyle.deleteActionsBtnLabel}
+              onClick={() => {
+                this.deleteActivities(this.state.selectedActivities)
+              }}
+              type="button"
             />
-
+          </ToolbarGroup>
+          <ToolbarGroup>
             <Link
               to="/actions/new"
               className="btn btn-primary">
@@ -286,4 +305,4 @@ function mapStateToProps(state) {
   }
 }
 // a shortcut to avoid mapDispatchToProps()
-export default connect(mapStateToProps, { fetchUserActivities })(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);

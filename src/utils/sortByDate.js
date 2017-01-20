@@ -58,8 +58,6 @@ const sortByDate = (list) => {
       val.timeInMilliseconds = convertedToMilliseconds;
     });
 
-    console.log("_.sortBy(unsortedList, 'timeInMilliseconds')", _.sortBy(unsortedList, 'timeInMilliseconds'));
-
     return _.sortBy(unsortedList, 'timeInMilliseconds');
   } else {
     return [];

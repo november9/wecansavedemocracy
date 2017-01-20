@@ -81,8 +81,6 @@ class TimeSelect extends Component {
           this.props.activities[this.state.indexOfSelectedRow].acf.start_minute = addLeadingZeros(minutes);
           this.props.activities[this.state.indexOfSelectedRow].acf.start_am_pm = amPm;
 
-          this.props.fetchUserActivities(this.props.activities);
-
           return (
             <span>
               <Moment format="h:mm a" date={this.state.startTime} />
