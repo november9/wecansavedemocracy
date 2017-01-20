@@ -3,6 +3,8 @@ import { TimePicker } from 'material-ui';
 import Moment from 'react-moment';
 import _ from 'lodash';
 import addLeadingZeros from '../../utils/addLeadingZeros';
+import { connect } from 'react-redux';
+import { fetchUserActivities } from '../../actions/index';
 
 class TimeSelect extends Component {
   constructor(props) {
@@ -79,6 +81,8 @@ class TimeSelect extends Component {
           this.props.activities[this.state.indexOfSelectedRow].acf.start_minute = addLeadingZeros(minutes);
           this.props.activities[this.state.indexOfSelectedRow].acf.start_am_pm = amPm;
 
+          this.props.fetchUserActivities(this.props.activities);
+
           return (
             <span>
               <Moment format="h:mm a" date={this.state.startTime} />
@@ -105,4 +109,11 @@ class TimeSelect extends Component {
   }
 }
 
-export default TimeSelect;
+function mapStateToProps(state) {
+  return {
+    activities: state.userActivities.all
+  }
+}
+// a shortcut to avoid mapDispatchToProps()
+export default connect(mapStateToProps, { fetchUserActivities })(TimeSelect);
+//export default TimeSelect;

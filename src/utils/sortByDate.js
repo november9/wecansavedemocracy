@@ -21,7 +21,7 @@ const sortByDate = (list) => {
 
     unsortedList = _.forEach(list, (val, key) => {
       // convert date
-      if (_.has(val, 'acf.date' && val.acf.date.length === 8)) {
+      if (_.has(val, 'acf.date') && val.acf.date.length === 8) {
         unformattedDate = val.acf.date;
         finalDate = moment(unformattedDate).format('YYYY-MM-DD');
       } else {

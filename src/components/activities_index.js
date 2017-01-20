@@ -7,7 +7,7 @@
 //import React from 'react';
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Toolbar, ToolbarGroup, ToolbarTitle, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
+import { FlatButton, Toolbar, ToolbarGroup, ToolbarTitle, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import DateSelect from './DateSelect/dateSelect';
@@ -17,36 +17,32 @@ import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
 import { fetchUserActivities } from '../actions/index';
 
-
 const tableCellProps = {
   whiteSpace: 'inherit',
   textOverflow: 'inherit',
   width: 'auto'
 }
 
-const styles = {
+const activityCellProps = {
+  whiteSpace: 'inherit',
+  textOverflow: 'inherit',
+  width: '50%'
+}
 
+const styles = {
   tableCell: tableCellProps,
   tableCellAlignTop: _.merge({}, tableCellProps, {
     verticalAlign: 'top',
     paddingTop: '15px'
   }),
-  activityTitleCell: {
-    whiteSpace: 'inherit',
-    textOverflow: 'inherit',
-    width: '50%',
+  activityTitleCell: _.merge({}, activityCellProps, {
     verticalAlign: 'top',
     paddingTop: '15px'
-  },
+  }),
   activityName: {
     fontSize: '20px'
   },
-  activityTitleHeaderCell: {
-    whiteSpace: 'inherit',
-    textOverflow: 'inherit',
-    width: '50%',
-    paddingTop: '15px'
-  },
+  activityTitleHeaderCell: activityCellProps,
   tableToolbar: {
     marginTop: '20px'
   },
@@ -56,11 +52,19 @@ const styles = {
   bottomActionBtn: {
     marginTop: '20px'
   },
+  addActionBtn: {
+    float: 'right'
+  },
   editLink: {
     cursor: 'pointer',
     textDecoration: 'underline'
+  },
+  deleteActionsBtnLabel: {
+    fontSize: '10px'
   }
 }
+
+let selectedActivities = [];
 
 class ActivitiesList extends Component {
   constructor(props) {
@@ -68,11 +72,12 @@ class ActivitiesList extends Component {
 
     this.state = {
       activities: this.props.activities,
+      selectedActivities: [],
       fixedHeader: true,
       fixedFooter: true,
       stripedRows: false,
       showRowHover: true,
-      selectable: false,
+      selectable: true,
       multiSelectable: true,
       enableSelectAll: true,
       deselectOnClickaway: false,
@@ -87,8 +92,33 @@ class ActivitiesList extends Component {
         action: 'Action',
         timeCommitment: 'Time Commitment',
         editAction: 'Edit Action',
-      }
+      },
+      addActionBtnLabel: 'Add An Action',
+      deleteActionsBtn: 'Delete Action(s)'
     };
+
+    this.handleRowSelection = this.handleRowSelection.bind(this);
+  }
+
+  handleRowSelection(rows) {
+    switch (rows) {
+    case 'all':
+      selectedActivities = this.state.activities;
+      break;
+    case 'none':
+      selectedActivities = [];
+      break;
+    default:
+      selectedActivities = [];
+      this.state.activities.forEach((activity, i) => {
+        activity.selected = rows.indexOf(i) > -1;
+        if (activity.selected === true) {
+          selectedActivities.push(activity);
+        }
+      });
+    }
+
+    this.setState({selectedActivities: selectedActivities});
   }
 
   toggleEditMode(activityRowKey) {
@@ -126,7 +156,9 @@ class ActivitiesList extends Component {
       }
 
       return (
-        <TableRow key={key}>
+        <TableRow
+          key={key}
+          selected={activity.selected}>
           <TableRowColumn style={this.state.bodyStyle.tableCellAlignTop}>
             <DateSelect
               indexOfSelectedRow={key}
@@ -171,21 +203,28 @@ class ActivitiesList extends Component {
   render () {
     return(
       <div>
-        <div>
-          <Link to="/actions/new" className="btn btn-primary">
-            <RaisedButton
-              label="Add An Action"
-              primary={true}
-            />
-          </Link>
-        </div>
-
         <Toolbar style={this.state.bodyStyle.tableToolbar}>
           <ToolbarGroup>
             <ToolbarTitle
               text={this.state.toolbarTitle}
               style={this.state.bodyStyle.tableToolbarText}
             />
+          </ToolbarGroup>
+          <ToolbarGroup>
+            <RaisedButton
+              label={this.state.deleteActionsBtn}
+              default={true}
+              labelStyle={this.state.bodyStyle.deleteActionsBtnLabel}
+            />
+
+            <Link
+              to="/actions/new"
+              className="btn btn-primary">
+              <RaisedButton
+                label={this.state.addActionBtnLabel}
+                primary={true}
+              />
+            </Link>
           </ToolbarGroup>
         </Toolbar>
         <Table
@@ -194,6 +233,7 @@ class ActivitiesList extends Component {
           fixedFooter={this.state.fixedFooter}
           selectable={this.state.selectable}
           multiSelectable={this.state.multiSelectable}
+          onRowSelection={this.handleRowSelection}
         >
         <TableHeader
           displaySelectAll={this.state.showCheckboxes}
@@ -230,7 +270,7 @@ class ActivitiesList extends Component {
         <div style={styles.bottomActionBtn}>
           <Link to="/actions/new" className="btn btn-primary">
             <RaisedButton
-              label="Add An Action"
+              label={this.state.addActionBtnLabel}
               primary={true}
             />
           </Link>

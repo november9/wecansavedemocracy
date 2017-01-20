@@ -105,7 +105,10 @@ class IndividualActivity extends Component {
 
   render() {
     return (
-      <TableRow key={this.props.ActivityData.id} style={this.state.bodyStyle.tableRow}>
+      <TableRow
+        key={this.props.ActivityData.id}
+        style={this.state.bodyStyle.tableRow}
+      >
         <TableRowColumn style={this.state.bodyStyle.btnCol}>
           <RaisedButton
             label={this.state.addBtnLabel}
