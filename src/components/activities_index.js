@@ -219,6 +219,10 @@ class ActivitiesList extends Component {
               text={this.state.toolbarTitle}
               style={this.state.bodyStyle.tableToolbarText}
             />
+
+            <div title="Add to Calendar" className="addeventstc" data-id="">
+              Add to Calendar
+            </div>
           </ToolbarGroup>
           <ToolbarGroup>
             <RaisedButton
@@ -230,8 +234,7 @@ class ActivitiesList extends Component {
               }}
               type="button"
             />
-          </ToolbarGroup>
-          <ToolbarGroup>
+
             <Link
               to="/actions/new"
               className="btn btn-primary">
