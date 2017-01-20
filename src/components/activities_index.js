@@ -100,7 +100,7 @@ class ActivitiesList extends Component {
 
   handleRowSelection(rows) {
     let selectedActivities = [];
-    console.log('rows', rows);
+
     switch (rows) {
     case 'all':
       selectedActivities = this.state.activities;
@@ -127,15 +127,11 @@ class ActivitiesList extends Component {
         indexOfEditedRow: activityRowKey
       });
     } else {
-      // first make input fields go away...
+      // make input fields go away and refresh the activities...
       this.props.fetchUserActivities(this.state.activities);
       this.setState({
         indexOfEditedRow: null,
         activities: this.state.activities,
-      }, () => {
-        this.setState({
-          selectedActivities: []
-        })
       });
     }
   }
@@ -157,7 +153,7 @@ class ActivitiesList extends Component {
     this.props.deleteUserActivities(selectedActivitiesTemp);
     this.setState({
       activities: selectedActivitiesTemp
-    }, this.handleRowSelection('none'))
+    }, () => this.handleRowSelection('none'));
   }
 
   renderActivities(idx) {
@@ -172,7 +168,7 @@ class ActivitiesList extends Component {
       return (
         <TableRow
           key={key}
-          selected={activity.selected}>
+          selected={this.selected}>
           <TableRowColumn style={this.state.bodyStyle.tableCellAlignTop}>
             <DateSelect
               indexOfSelectedRow={key}

@@ -30,7 +30,7 @@
     "babel-preset-stage-1": "^6.1.18",
     "lodash": "^4.17.2",
     "material-design-icons": "^3.0.1",
-    "material-ui": "^0.16.5",
+    "material-ui": "^0.16.7",
     "moment": "^2.17.1",
     "react-dom": "^15.4.1",
     "react-moment": "^0.1.2",

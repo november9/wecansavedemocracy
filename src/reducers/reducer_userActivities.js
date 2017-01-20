@@ -24,14 +24,12 @@ export default function (state = INITIAL_STATE, action) {
     return state;
   case FETCH_USER_ACTIVITIES:
     state.all = sortByDate(action.payload);
-    console.log('state.all', state.all);
     return state;
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;
     browserHistory.push('/find-representative');
     return state;
   case DELETE_USER_ACTIVITIES:
-    console.log('action.payload', action.payload);
     state.all = _.filter(action.payload, (val, key) => {
       return val.selected !== true;
     });
