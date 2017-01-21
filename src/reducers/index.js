@@ -3,6 +3,7 @@ import ActivitiesReducer from './reducer_activities';
 import CausesReducer from './reducer_causes';
 import UserActivitiesReducer from './reducer_userActivities';
 import RepresentativesReducer from './reducer_representatives';
+import CalendarReducer from './reducer_calendar';
 
 // the syntax below allows us to avoid using the property name, 'reducer',
 // as using that name could lead to naming conflicts
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   causes: CausesReducer,
   userActivities: UserActivitiesReducer,
   form: formReducer,
-  representatives: RepresentativesReducer
+  representatives: RepresentativesReducer,
+  calendar: CalendarReducer
 });
 
 export default rootReducer;

@@ -15,7 +15,7 @@ import TimeSelect from './TimeSelect/timeSelect';
 import TimeCommitmentSelect from './TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
-import { fetchUserActivities, deleteUserActivities } from '../actions/index';
+import { fetchUserActivities, deleteUserActivities, createCalendar } from '../actions/index';
 
 const tableCellProps = {
   whiteSpace: 'inherit',
@@ -64,6 +64,21 @@ const styles = {
   }
 }
 
+// Capture when an option in the drop down is clicked
+window.addeventasync = function(e) {
+  e.preventDefault();
+  addeventstc.register('button-click', function(obj) {
+
+    // Console log example
+    console.log('button-dropdown-click -> ' + obj.id + ', service -> ' + obj.service);
+
+    // Track event click with e.g. Google Analytics (using analytics.js)
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+    //ga('send', 'event', 'AddToCalendar', 'play', 'Fall Campaign');
+
+  });
+};
+
 class ActivitiesList extends Component {
   constructor(props) {
     super(props);
@@ -92,7 +107,8 @@ class ActivitiesList extends Component {
         editAction: 'Edit Action',
       },
       addActionBtnLabel: 'Add An Action',
-      deleteActionsBtn: 'Delete Action(s)'
+      deleteActionsBtn: 'Delete Action(s)',
+      putOnCalendar: 'Add these actions to your calendar!'
     };
 
     this.handleRowSelection = this.handleRowSelection.bind(this);
@@ -220,9 +236,15 @@ class ActivitiesList extends Component {
               style={this.state.bodyStyle.tableToolbarText}
             />
 
-            <div title="Add to Calendar" className="addeventstc" data-id="">
-              Add to Calendar
-            </div>
+            <RaisedButton
+              label={this.state.putOnCalendar}
+              default={true}
+              onClick={() => {
+                this.props.createCalendar();
+              }}
+              type="button"
+            />
+
           </ToolbarGroup>
           <ToolbarGroup>
             <RaisedButton
@@ -304,4 +326,4 @@ function mapStateToProps(state) {
   }
 }
 // a shortcut to avoid mapDispatchToProps()
-export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities, createCalendar })(ActivitiesList);
