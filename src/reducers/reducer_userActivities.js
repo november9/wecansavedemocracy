@@ -23,9 +23,12 @@ export default function (state = INITIAL_STATE, action) {
     browserHistory.push('/');
     return state;
   case FETCH_USER_ACTIVITIES:
-    state.all = sortByDate(action.payload);
+    tempActivityList = sortByDate(action.payload).concat();
     console.log('state.all', state.all);
-    return state;
+    return {
+      ...state,
+      all: tempActivityList
+    };
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;
     browserHistory.push('/find-representative');

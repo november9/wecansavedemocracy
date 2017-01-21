@@ -91,13 +91,6 @@ class ActivitiesList extends Component {
     this.handleRowSelection = this.handleRowSelection.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
-    this.setState({
-      activities: nextProps.activities
-    });
-  }
-
   handleRowSelection(rows) {
     let selectedActivities = [];
 
