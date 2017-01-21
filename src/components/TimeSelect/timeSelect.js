@@ -30,6 +30,19 @@ class TimeSelect extends Component {
   }
 
   handleChangeTimepicker12 = (event, date) => {
+    // break new time down into pieces to correspond with activity object from API
+    const hours = date.getHours();
+    const convertedHours = ((hours + 11) % 12 + 1);
+    const minutes = date.getMinutes();
+    const amPm = hours >= 12 ? 'PM':'AM';
+
+    // update the user activity with the newly selected start time
+    this.props.activities[this.state.indexOfSelectedRow].acf.start_hour = convertedHours;
+    this.props.activities[this.state.indexOfSelectedRow].acf.start_minute = addLeadingZeros(minutes);
+    this.props.activities[this.state.indexOfSelectedRow].acf.start_am_pm = amPm;
+
+
+    //this.props.fetchUserActivities(this.props.activities);
     this.setState({startTime: date});
   };
 
@@ -70,16 +83,6 @@ class TimeSelect extends Component {
         // if we've already gotten the start time from the time picker,
         // then convert that time to the same format we're getting from the API
         if (this.state.startTime !== null) {
-          // break new time down into pieces to correspond with activity object from API
-          const hours = this.state.startTime.getHours();
-          const convertedHours = ((hours + 11) % 12 + 1);
-          const minutes = this.state.startTime.getMinutes();
-          const amPm = hours >= 12 ? 'PM':'AM';
-
-          // update the user activity with the newly selected start time
-          this.props.activities[this.state.indexOfSelectedRow].acf.start_hour = convertedHours;
-          this.props.activities[this.state.indexOfSelectedRow].acf.start_minute = addLeadingZeros(minutes);
-          this.props.activities[this.state.indexOfSelectedRow].acf.start_am_pm = amPm;
 
           return (
             <span>
@@ -94,7 +97,7 @@ class TimeSelect extends Component {
             </span>
           );
         }
-        this.state.setState({ startTime: null });
+
       } else {
         //...or display the placeholder text for when no start time is selected
         return (
@@ -103,6 +106,7 @@ class TimeSelect extends Component {
           </span>
         );
       }
+
     }
   }
 }

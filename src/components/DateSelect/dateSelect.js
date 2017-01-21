@@ -22,6 +22,10 @@ class DateSelect extends Component {
   }
 
   handleDateChange = (event, date) => {
+    this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(date).format('YYYYMMDD');
+
+    //this.props.fetchUserActivities(this.props.activities);
+
     this.setState({
       startDate: date,
     });
@@ -51,10 +55,8 @@ class DateSelect extends Component {
           startDate = this.state.startDate;
         }
 
-
-
         // save the new value to the global state
-        this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(startDate).format('YYYYMMDD');
+
 
         return (
           <span>
@@ -65,7 +67,7 @@ class DateSelect extends Component {
           </span>
         )
 
-        this.state.setState({ startDate: null });
+        //this.state.setState({ startDate: null });
       } else {
         //...or display the placeholder text for when no start date is selected
         return (

@@ -24,6 +24,7 @@ export default function (state = INITIAL_STATE, action) {
     return state;
   case FETCH_USER_ACTIVITIES:
     state.all = sortByDate(action.payload);
+    console.log('state.all', state.all);
     return state;
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;

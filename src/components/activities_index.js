@@ -1,10 +1,3 @@
-// PROCESS FOR CREATING A CONTAINER THAT CAN CALL ACTIVITY CREATORS
-// 1) Import connect at top
-// 2) Import activity creator
-// 3) We define our mapDispatchToProps() function
-// 4) And we connect it to our component
-
-//import React from 'react';
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { FlatButton, Toolbar, ToolbarGroup, ToolbarTitle, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
@@ -98,6 +91,13 @@ class ActivitiesList extends Component {
     this.handleRowSelection = this.handleRowSelection.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
+    this.setState({
+      activities: nextProps.activities
+    });
+  }
+
   handleRowSelection(rows) {
     let selectedActivities = [];
 
@@ -128,10 +128,12 @@ class ActivitiesList extends Component {
       });
     } else {
       // make input fields go away and refresh the activities...
-      this.props.fetchUserActivities(this.state.activities);
+      this.props.fetchUserActivities(this.props.activities);
+      console.log('this.state.activities', this.state.activities);
+      console.log('this.props.activities', this.props.activities);
       this.setState({
         indexOfEditedRow: null,
-        activities: this.state.activities,
+        //activities: this.state.activities,
       });
     }
   }
@@ -219,6 +221,31 @@ class ActivitiesList extends Component {
               text={this.state.toolbarTitle}
               style={this.state.bodyStyle.tableToolbarText}
             />
+
+            <span className="addtocalendar atc-style-blue">
+              <var className="atc_event">
+                  <var className="atc_date_start">2014-05-04 12:00:00</var>
+                  <var className="atc_date_end">2014-05-04 18:00:00</var>
+                  <var className="atc_timezone">Europe/London</var>
+                  <var className="atc_title">Star Wars Day Party</var>
+                  <var className="atc_description">May the force be with you</var>
+                  <var className="atc_location">Tatooine</var>
+                  <var className="atc_organizer">Luke Skywalker</var>
+                  <var className="atc_organizer_email">luke@starwars.com</var>
+              </var>
+
+              <var className="atc_event">
+                  <var className="atc_date_start">2014-05-04 12:00:00</var>
+                  <var className="atc_date_end">2014-05-04 18:00:00</var>
+                  <var className="atc_timezone">Europe/London</var>
+                  <var className="atc_title">Star Wars Day Party</var>
+                  <var className="atc_description">May the force be with you</var>
+                  <var className="atc_location">Tatooine</var>
+                  <var className="atc_organizer">Luke Skywalker</var>
+                  <var className="atc_organizer_email">luke@starwars.com</var>
+              </var>
+            </span>
+
           </ToolbarGroup>
           <ToolbarGroup>
             <RaisedButton
@@ -230,8 +257,7 @@ class ActivitiesList extends Component {
               }}
               type="button"
             />
-          </ToolbarGroup>
-          <ToolbarGroup>
+
             <Link
               to="/actions/new"
               className="btn btn-primary">
@@ -242,6 +268,7 @@ class ActivitiesList extends Component {
             </Link>
           </ToolbarGroup>
         </Toolbar>
+
         <Table
           height={this.state.height}
           fixedHeader={this.state.fixedHeader}
@@ -296,6 +323,7 @@ class ActivitiesList extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state from mapStateToProps', state);
   return {
     activities: state.userActivities.all
   }

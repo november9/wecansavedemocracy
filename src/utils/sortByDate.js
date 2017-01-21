@@ -23,9 +23,9 @@ const sortByDate = (list) => {
       // convert date
       if (_.has(val, 'acf.date') && val.acf.date.length === 8) {
         unformattedDate = val.acf.date;
-        finalDate = moment(unformattedDate).format('YYYY-MM-DD');
+        finalDate = moment(unformattedDate);
       } else {
-        finalDate = dateToday;
+        finalDate = moment();
       }
 
       // convert time
@@ -44,21 +44,29 @@ const sortByDate = (list) => {
           militaryHours = val.acf.start_hour;
         }
 
-        convertedHours = addLeadingZeros(militaryHours);
+        //convertedHours = addLeadingZeros(militaryHours);
 
-        finalTime = convertedHours + ':' + val.acf.start_minute;
-      } else {
-        finalTime = '00:00'
+        //finalTime = convertedHours + ':' + val.acf.start_minute;
+        finalDate.hours(militaryHours);
+        finalDate.minutes(val.acf.start_minute);
+
+      // } else {
+      //   finalTime = '00:00'
       }
 
-      convertedDateTime = finalDate + ' ' + finalTime;
-      convertedByMoment = moment(convertedDateTime).format('YYYY-MM-DD HH:mm');
-      convertedToMilliseconds = moment(convertedByMoment).valueOf();
+      console.log('finalDate', finalDate);
+      console.log("moment(finalDate).format('YYYY-MM-DD HH:mm')", moment(finalDate).format('YYYY-MM-DD HH:mm'));
+
+      // convertedDateTime = finalDate + ' ' + finalTime;
+      // convertedByMoment = moment(convertedDateTime).format('YYYY-MM-DD HH:mm');
+      convertedToMilliseconds = finalDate.valueOf();
 
       val.timeInMilliseconds = convertedToMilliseconds;
     });
 
-    return _.sortBy(unsortedList, 'timeInMilliseconds');
+    console.log("_.sortBy(unsortedList, ['timeInMilliseconds'])", _.sortBy(unsortedList, ['timeInMilliseconds']));
+
+    return _.sortBy(unsortedList, ['timeInMilliseconds']);
   } else {
     return [];
   }
