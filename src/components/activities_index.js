@@ -94,7 +94,6 @@ class ActivitiesList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
     this.setState({
       userActivities: nextProps.userActivities
     })
@@ -131,8 +130,6 @@ class ActivitiesList extends Component {
     } else {
       // make input fields go away and refresh the activities...
       this.props.fetchUserActivities(this.state.userActivities);
-      console.log('this.state.userActivities', this.state.userActivities);
-      console.log('this.props.userActivities', this.props.userActivities);
       this.setState({
         indexOfEditedRow: null,
         userActivities: this.state.userActivities,
@@ -161,7 +158,6 @@ class ActivitiesList extends Component {
   }
 
   renderActivities(idx) {
-    console.log('RE-RENDERING!!', this.state.userActivities)
     return this.state.userActivities.map((activity, key) => {
       if (!activity.hasOwnProperty('isInEditMode')) {
         _.merge(activity, {
@@ -329,5 +325,5 @@ function mapStateToProps(state) {
     userActivities: state.userActivities.all
   }
 }
-// a shortcut to avoid mapDispatchToProps()
+
 export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);

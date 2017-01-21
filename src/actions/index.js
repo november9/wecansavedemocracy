@@ -78,7 +78,6 @@ export function findReps(address) {
 }
 
 export function deleteUserActivities(deletedActivities) {
-  console.log('deletedActivities from actions', deletedActivities);
   return {
     type: DELETE_USER_ACTIVITIES,
     payload: deletedActivities

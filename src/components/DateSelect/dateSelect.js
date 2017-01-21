@@ -23,6 +23,7 @@ class DateSelect extends Component {
 
   componentWillReceiveProps(nextProps) {
 
+    // some of these can probably go...
     this.setState({
       indexOfSelectedRow: nextProps.indexOfSelectedRow,
       indexOfEditedRow: nextProps.indexOfEditedRow,
@@ -35,10 +36,7 @@ class DateSelect extends Component {
   }
 
   handleDateChange = (event, date) => {
-    console.log('date', date);
     this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(date).format('YYYYMMDD');
-
-    //this.props.fetchUserActivities(this.props.activities);
 
     this.setState({
       startDate: date,
@@ -50,7 +48,6 @@ class DateSelect extends Component {
 
     if (_.every(['date'], _.partial(_.has, this.state.customFields))) {
       startDate = this.state.customFields.date;
-      console.log('startDate', startDate)
     }
 
     if (this.props.indexOfEditedRow === this.state.indexOfSelectedRow) {
@@ -66,13 +63,9 @@ class DateSelect extends Component {
     } else {
       if (startDate || this.state.startDate !== null) {
 
-        if (this.state.startDate !== null) {
+        if (!startDate && this.state.startDate !== null) {
           startDate = this.state.startDate;
         }
-
-        // save the new value to the global state
-
-        console.log('startDate', startDate);
 
         return (
           <span>
@@ -83,7 +76,6 @@ class DateSelect extends Component {
           </span>
         )
 
-        //this.state.setState({ startDate: null });
       } else {
         //...or display the placeholder text for when no start date is selected
         return (
@@ -96,11 +88,4 @@ class DateSelect extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     activities: state.userActivities.all
-//   }
-// }
-//
-// export default connect(mapStateToProps, { fetchUserActivities })(DateSelect);
 export default DateSelect;

@@ -1,7 +1,6 @@
 import moment from 'moment';
 import addLeadingZeros from '../utils/addLeadingZeros';
 
-
 const sortByDate = (list) => {
 
   if (_.isArray(list)) {
@@ -9,14 +8,8 @@ const sortByDate = (list) => {
     let finalDate;
     let startTimeMins;
     let unformattedTime;
-    let finalTime;
     let unsortedList;
-    let dateToday = moment().format('YYYY-MM-DD');
     let militaryHours;
-    let convertedHours;
-    let convertedMinutes;
-    let convertedDateTime;
-    let convertedByMoment;
     let convertedToMilliseconds;
 
     unsortedList = _.forEach(list, (val, key) => {
@@ -44,25 +37,15 @@ const sortByDate = (list) => {
           militaryHours = val.acf.start_hour;
         }
 
-        //convertedHours = addLeadingZeros(militaryHours);
-
-        //finalTime = convertedHours + ':' + val.acf.start_minute;
         finalDate.hours(militaryHours);
         finalDate.minutes(val.acf.start_minute);
-
-      // } else {
-      //   finalTime = '00:00'
       }
 
 
-      // convertedDateTime = finalDate + ' ' + finalTime;
-      // convertedByMoment = moment(convertedDateTime).format('YYYY-MM-DD HH:mm');
       convertedToMilliseconds = finalDate.valueOf();
 
       val.timeInMilliseconds = convertedToMilliseconds;
     });
-
-    console.log("_.sortBy(unsortedList, ['timeInMilliseconds'])", _.sortBy(unsortedList, ['timeInMilliseconds']));
 
     return _.sortBy(unsortedList, ['timeInMilliseconds']);
   } else {

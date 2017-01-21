@@ -10,6 +10,7 @@ class TimeSelect extends Component {
   constructor(props) {
     super(props);
 
+    // some of these can probably go
     this.state = {
       indexOfSelectedRow: props.indexOfSelectedRow,
       indexOfEditedRow: props.indexOfEditedRow,
@@ -121,11 +122,4 @@ class TimeSelect extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     activities: state.userActivities.all
-//   }
-// }
-//
-// export default connect(mapStateToProps, { fetchUserActivities })(TimeSelect);
 export default TimeSelect;
