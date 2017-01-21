@@ -54,8 +54,6 @@ const sortByDate = (list) => {
       //   finalTime = '00:00'
       }
 
-      console.log('finalDate', finalDate);
-      console.log("moment(finalDate).format('YYYY-MM-DD HH:mm')", moment(finalDate).format('YYYY-MM-DD HH:mm'));
 
       // convertedDateTime = finalDate + ' ' + finalTime;
       // convertedByMoment = moment(convertedDateTime).format('YYYY-MM-DD HH:mm');

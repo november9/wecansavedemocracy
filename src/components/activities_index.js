@@ -57,12 +57,14 @@ const styles = {
   }
 }
 
+
+
 class ActivitiesList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activities: this.props.activities,
+      userActivities: this.props.userActivities,
       selectedActivities: [],
       fixedHeader: true,
       fixedFooter: true,
@@ -91,19 +93,26 @@ class ActivitiesList extends Component {
     this.handleRowSelection = this.handleRowSelection.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
+    this.setState({
+      userActivities: nextProps.userActivities
+    })
+  }
+
   handleRowSelection(rows) {
     let selectedActivities = [];
 
     switch (rows) {
     case 'all':
-      selectedActivities = this.state.activities;
+      selectedActivities = this.state.userActivities;
       break;
     case 'none':
       selectedActivities = [];
       break;
     default:
       selectedActivities = [];
-      this.state.activities.forEach((activity, i) => {
+      this.state.userActivities.forEach((activity, i) => {
         activity.selected = rows.indexOf(i) > -1;
         if (activity.selected === true) {
           selectedActivities.push(activity);
@@ -121,12 +130,12 @@ class ActivitiesList extends Component {
       });
     } else {
       // make input fields go away and refresh the activities...
-      this.props.fetchUserActivities(this.props.activities);
-      console.log('this.state.activities', this.state.activities);
-      console.log('this.props.activities', this.props.activities);
+      this.props.fetchUserActivities(this.state.userActivities);
+      console.log('this.state.userActivities', this.state.userActivities);
+      console.log('this.props.userActivities', this.props.userActivities);
       this.setState({
         indexOfEditedRow: null,
-        //activities: this.state.activities,
+        userActivities: this.state.userActivities,
       });
     }
   }
@@ -152,8 +161,8 @@ class ActivitiesList extends Component {
   }
 
   renderActivities(idx) {
-    console.log('RE-RENDERING!!', this.state.activities)
-    return this.state.activities.map((activity, key) => {
+    console.log('RE-RENDERING!!', this.state.userActivities)
+    return this.state.userActivities.map((activity, key) => {
       if (!activity.hasOwnProperty('isInEditMode')) {
         _.merge(activity, {
           isInEditMode: false,
@@ -168,7 +177,7 @@ class ActivitiesList extends Component {
             <DateSelect
               indexOfSelectedRow={key}
               indexOfEditedRow={idx}
-              activities={this.state.activities}
+              activities={this.state.userActivities}
               ref="dateSelect"
             />
           </TableRowColumn>
@@ -176,21 +185,21 @@ class ActivitiesList extends Component {
             <TimeSelect
               indexOfSelectedRow={key}
               indexOfEditedRow={idx}
-              activities={this.state.activities}
+              activities={this.state.userActivities}
             />
           </TableRowColumn>
           <TableRowColumn style={this.state.bodyStyle.activityTitleCell}>
             <strong style={this.state.bodyStyle.activityName} dangerouslySetInnerHTML={{ __html: activity.title.rendered }}></strong>
             <UserSelectedRepList
               indexOfCurrentRow={key}
-              activities={this.state.activities}
+              activities={this.state.userActivities}
             />
           </TableRowColumn>
           <TableRowColumn style={this.state.bodyStyle.tableCellAlignTop}>
             <TimeCommitmentSelect
               indexOfSelectedRow={key}
               indexOfEditedRow={idx}
-              activities={this.state.activities}
+              activities={this.state.userActivities}
             />
           </TableRowColumn>
           <TableRowColumn style={this.state.bodyStyle.tableCellAlignTop}>
@@ -316,9 +325,8 @@ class ActivitiesList extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state from mapStateToProps', state);
   return {
-    activities: state.userActivities.all
+    userActivities: state.userActivities.all
   }
 }
 // a shortcut to avoid mapDispatchToProps()

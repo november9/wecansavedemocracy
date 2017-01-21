@@ -57,6 +57,7 @@ class DateSelect extends Component {
 
         // save the new value to the global state
 
+        console.log('startDate', startDate);
 
         return (
           <span>
@@ -80,10 +81,11 @@ class DateSelect extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    activities: state.userActivities.all
-  }
-}
-// a shortcut to avoid mapDispatchToProps()
-export default connect(mapStateToProps, { fetchUserActivities })(DateSelect);
+// function mapStateToProps(state) {
+//   return {
+//     activities: state.userActivities.all
+//   }
+// }
+//
+// export default connect(mapStateToProps, { fetchUserActivities })(DateSelect);
+export default DateSelect;

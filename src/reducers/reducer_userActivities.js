@@ -24,7 +24,6 @@ export default function (state = INITIAL_STATE, action) {
     return state;
   case FETCH_USER_ACTIVITIES:
     tempActivityList = sortByDate(action.payload).concat();
-    console.log('state.all', state.all);
     return {
       ...state,
       all: tempActivityList

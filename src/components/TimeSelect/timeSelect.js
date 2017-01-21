@@ -111,11 +111,11 @@ class TimeSelect extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    activities: state.userActivities.all
-  }
-}
-// a shortcut to avoid mapDispatchToProps()
-export default connect(mapStateToProps, { fetchUserActivities })(TimeSelect);
-//export default TimeSelect;
+// function mapStateToProps(state) {
+//   return {
+//     activities: state.userActivities.all
+//   }
+// }
+//
+// export default connect(mapStateToProps, { fetchUserActivities })(TimeSelect);
+export default TimeSelect;
