@@ -21,7 +21,21 @@ class DateSelect extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    this.setState({
+      indexOfSelectedRow: nextProps.indexOfSelectedRow,
+      indexOfEditedRow: nextProps.indexOfEditedRow,
+      activities: nextProps.activities,
+      customFields: nextProps.activities[nextProps.indexOfSelectedRow].acf,
+      timePlaceholder: '(any time)',
+      timePickerHint: 'select time',
+      startTime: null,
+    })
+  }
+
   handleDateChange = (event, date) => {
+    console.log('date', date);
     this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(date).format('YYYYMMDD');
 
     //this.props.fetchUserActivities(this.props.activities);
@@ -36,6 +50,7 @@ class DateSelect extends Component {
 
     if (_.every(['date'], _.partial(_.has, this.state.customFields))) {
       startDate = this.state.customFields.date;
+      console.log('startDate', startDate)
     }
 
     if (this.props.indexOfEditedRow === this.state.indexOfSelectedRow) {

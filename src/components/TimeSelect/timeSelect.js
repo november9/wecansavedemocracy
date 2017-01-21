@@ -21,6 +21,16 @@ class TimeSelect extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    this.setState({
+      indexOfSelectedRow: nextProps.indexOfSelectedRow,
+      indexOfEditedRow: nextProps.indexOfEditedRow,
+      activities: nextProps.activities,
+      customFields: nextProps.activities[nextProps.indexOfSelectedRow].acf,
+    })
+  }
+
   addLeadingZeros (num) {
     if (num < 9) {
       return '0' + num;
