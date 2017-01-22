@@ -306,7 +306,7 @@ class FindRep extends Component {
       return this.state.tempData.payload
       .then((response) => {
         // adding a unique index to each official in the list for deduping purposes
-        // later on 
+        // later on
         _.forEach(response.data.officials, (val, key) => {
           response.data.officials[key]['tempIdx'] = key;
         });
@@ -351,7 +351,8 @@ class FindRep extends Component {
       selectedReps: selectedRepList
     });
 
-    this.props.addUserActivity(activityDataWithReps)
+    this.props.addUserActivity(activityDataWithReps);
+    browserHistory.push('/');
   }
 
   render() {

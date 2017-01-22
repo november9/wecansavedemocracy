@@ -11,6 +11,9 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
+  let tempActivityList = [];
+  let tempActivityListSorted = [];
+
   switch(action.type) {
   case ADD_USER_ACTIVITY:
     state.all.push(action.payload);
@@ -19,27 +22,44 @@ export default function (state = INITIAL_STATE, action) {
     state.all = sortByDate(tempActivityList);
     tempActivityList = [];
     state.tempActivityData = {};
-    browserHistory.push('/');
+    localStorage.setItem('userActivities', JSON.stringify(state.all));
     return state;
+    //
+    //
+    //
+    // console.log('we made it to add!');
+    // tempActivityList = state.all;
+    // tempActivityList.push(action.payload);
+    // tempActivityListSorted = sortByDate(tempActivityList);
+    //
+    // state.all = [];
+    // state.tempActivityData = {};
+    // return {
+    //   ...state,
+    //   all: tempActivityListSorted
+    // };
   case FETCH_USER_ACTIVITIES:
     tempActivityList = sortByDate(action.payload).concat();
+    localStorage.setItem('userActivities', JSON.stringify(tempActivityList));
     return {
       ...state,
       all: tempActivityList
     };
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;
-    browserHistory.push('/find-representative');
     return state;
   case DELETE_USER_ACTIVITIES:
     tempActivityList = _.filter(action.payload, (val, key) => {
       return val.selected !== true;
     });
+    localStorage.setItem('userActivities', JSON.stringify(tempActivityList));
     return {
       ...state,
       all: tempActivityList
     };
   default:
+    // console.log('default from reducer!', state.all);
+    // localStorage.setItem('userActivities', JSON.stringify(state.all));
     return state;
   }
 }

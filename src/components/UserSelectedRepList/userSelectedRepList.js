@@ -16,12 +16,14 @@ const styles = {
 }
 
 const UserSelectedRepList = (props) => {
+  console.log('props', props);
   if (!props.activities[props.indexOfCurrentRow].hasOwnProperty('selectedReps')) {
     return null;
   }
 
   const repListItems = props.activities[props.indexOfCurrentRow].selectedReps.map((rep, key) =>
   {
+    console.log('rep', rep);
     return (
       <li
         key={key}

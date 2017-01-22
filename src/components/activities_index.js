@@ -134,7 +134,9 @@ class ActivitiesList extends Component {
       this.setState({
         indexOfEditedRow: null,
         userActivities: this.state.userActivities,
-      }, () => this.handleRowSelection('none'));
+      }, () => {
+        this.handleRowSelection('none');
+      });
     }
   }
 
@@ -154,7 +156,9 @@ class ActivitiesList extends Component {
     this.props.deleteUserActivities(this.state.userActivities);
     this.setState({
       userActivities: this.state.userActivities
-    }, () => this.handleRowSelection('none'));
+    }, () => {
+      this.handleRowSelection('none');
+    });
   }
 
   renderActivities(idx) {
@@ -220,29 +224,7 @@ class ActivitiesList extends Component {
               style={this.state.bodyStyle.tableToolbarText}
             />
 
-            <span className="addtocalendar atc-style-blue">
-              <var className="atc_event">
-                  <var className="atc_date_start">2014-05-04 12:00:00</var>
-                  <var className="atc_date_end">2014-05-04 18:00:00</var>
-                  <var className="atc_timezone">Europe/London</var>
-                  <var className="atc_title">Star Wars Day Party</var>
-                  <var className="atc_description">May the force be with you</var>
-                  <var className="atc_location">Tatooine</var>
-                  <var className="atc_organizer">Luke Skywalker</var>
-                  <var className="atc_organizer_email">luke@starwars.com</var>
-              </var>
 
-              <var className="atc_event">
-                  <var className="atc_date_start">2014-05-04 12:00:00</var>
-                  <var className="atc_date_end">2014-05-04 18:00:00</var>
-                  <var className="atc_timezone">Europe/London</var>
-                  <var className="atc_title">Star Wars Day Party</var>
-                  <var className="atc_description">May the force be with you</var>
-                  <var className="atc_location">Tatooine</var>
-                  <var className="atc_organizer">Luke Skywalker</var>
-                  <var className="atc_organizer_email">luke@starwars.com</var>
-              </var>
-            </span>
 
           </ToolbarGroup>
           <ToolbarGroup>
@@ -321,9 +303,38 @@ class ActivitiesList extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    userActivities: state.userActivities.all
-  }
+  let userActivityDataFromLocalStorage;
+  let userActivityData;
+
+  // if (JSON.parse(localStorage.getItem('userActivities'))) {
+  //   userActivityDataFromLocalStorage = JSON.parse(localStorage.getItem('userActivities'));
+  //   if (Array.isArray(userActivityDataFromLocalStorage)) {
+  //     // userActivityData = {
+  //     //   ...state,
+  //     //   userActivities: {
+  //     //     all:
+  //     //   }
+  //     // }
+  //
+  //
+  //     return {
+  //       userActivities: userActivityDataFromLocalStorage
+  //     }
+  //   } else {
+  //     return {
+  //       userActivities: state.userActivities.all
+  //     }
+  //   }
+  // } else {
+  //   console.log('state.userActivities.all', state.userActivities.all);
+
+    console.log("JSON.parse(localStorage.getItem('userActivities')",  JSON.parse(localStorage.getItem('userActivities')));
+    console.log("state.userActivities.all", state.userActivities.all);
+
+    return {
+      userActivities: JSON.parse(localStorage.getItem('userActivities')) || state.userActivities.all
+    }
+  //}
 }
 
 export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);

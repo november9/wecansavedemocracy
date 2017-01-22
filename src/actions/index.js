@@ -62,9 +62,11 @@ export function lookForReps(selectedActivity) {
 }
 
 export function fetchUserActivities (userActivities) {
+  console.log('localStorage.userActivities', localStorage.userActivities);
+
   return {
     type: FETCH_USER_ACTIVITIES,
-    payload: userActivities
+    payload: JSON.parse(localStorage.getItem('userActivities')) || userActivities
   }
 }
 
