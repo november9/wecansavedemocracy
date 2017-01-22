@@ -32,10 +32,13 @@ export default function (state = INITIAL_STATE, action) {
     browserHistory.push('/find-representative');
     return state;
   case DELETE_USER_ACTIVITIES:
-    state.all = _.filter(action.payload, (val, key) => {
+    tempActivityList = _.filter(action.payload, (val, key) => {
       return val.selected !== true;
     });
-    return state;
+    return {
+      ...state,
+      all: tempActivityList
+    };
   default:
     return state;
   }

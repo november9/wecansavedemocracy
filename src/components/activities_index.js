@@ -130,10 +130,11 @@ class ActivitiesList extends Component {
     } else {
       // make input fields go away and refresh the activities...
       this.props.fetchUserActivities(this.state.userActivities);
+      this.state.userActivities = [];
       this.setState({
         indexOfEditedRow: null,
         userActivities: this.state.userActivities,
-      });
+      }, () => this.handleRowSelection('none'));
     }
   }
 
@@ -150,10 +151,9 @@ class ActivitiesList extends Component {
   }
 
   deleteActivities(selectedActivities) {
-    let selectedActivitiesTemp = selectedActivities;
-    this.props.deleteUserActivities(selectedActivitiesTemp);
+    this.props.deleteUserActivities(this.state.userActivities);
     this.setState({
-      activities: selectedActivitiesTemp
+      userActivities: this.state.userActivities
     }, () => this.handleRowSelection('none'));
   }
 
