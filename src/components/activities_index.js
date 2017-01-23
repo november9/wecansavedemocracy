@@ -57,8 +57,6 @@ const styles = {
   }
 }
 
-
-
 class ActivitiesList extends Component {
   constructor(props) {
     super(props);
@@ -219,32 +217,8 @@ class ActivitiesList extends Component {
               text={this.state.toolbarTitle}
               style={this.state.bodyStyle.tableToolbarText}
             />
-
-            <span className="addtocalendar atc-style-blue">
-              <var className="atc_event">
-                  <var className="atc_date_start">2014-05-04 12:00:00</var>
-                  <var className="atc_date_end">2014-05-04 18:00:00</var>
-                  <var className="atc_timezone">Europe/London</var>
-                  <var className="atc_title">Star Wars Day Party</var>
-                  <var className="atc_description">May the force be with you</var>
-                  <var className="atc_location">Tatooine</var>
-                  <var className="atc_organizer">Luke Skywalker</var>
-                  <var className="atc_organizer_email">luke@starwars.com</var>
-              </var>
-
-              <var className="atc_event">
-                  <var className="atc_date_start">2014-05-04 12:00:00</var>
-                  <var className="atc_date_end">2014-05-04 18:00:00</var>
-                  <var className="atc_timezone">Europe/London</var>
-                  <var className="atc_title">Star Wars Day Party</var>
-                  <var className="atc_description">May the force be with you</var>
-                  <var className="atc_location">Tatooine</var>
-                  <var className="atc_organizer">Luke Skywalker</var>
-                  <var className="atc_organizer_email">luke@starwars.com</var>
-              </var>
-            </span>
-
           </ToolbarGroup>
+          
           <ToolbarGroup>
             <RaisedButton
               label={this.state.deleteActionsBtn}

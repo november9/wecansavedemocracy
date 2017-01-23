@@ -11,6 +11,8 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
+  console.log('state', state);
+
   switch(action.type) {
   case ADD_USER_ACTIVITY:
     state.all.push(action.payload);
@@ -19,7 +21,6 @@ export default function (state = INITIAL_STATE, action) {
     state.all = sortByDate(tempActivityList);
     tempActivityList = [];
     state.tempActivityData = {};
-    browserHistory.push('/');
     return state;
   case FETCH_USER_ACTIVITIES:
     tempActivityList = sortByDate(action.payload).concat();
@@ -29,7 +30,6 @@ export default function (state = INITIAL_STATE, action) {
     };
   case LOOK_FOR_REPS:
     state.tempActivityData = action.payload;
-    browserHistory.push('/find-representative');
     return state;
   case DELETE_USER_ACTIVITIES:
     tempActivityList = _.filter(action.payload, (val, key) => {

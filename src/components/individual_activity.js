@@ -89,6 +89,7 @@ class IndividualActivity extends Component {
   addActivity(activityData) {
     if (activityData.acf.special_content !== 'findrep' && activityData.acf.special_content !== 'elections') {
       this.props.addUserActivity(activityData);
+      browserHistory.push('/');
     } else {
 
       switch(activityData.acf.special_content) {
