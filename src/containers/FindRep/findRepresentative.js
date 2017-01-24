@@ -348,7 +348,7 @@ class FindRep extends Component {
 
     // here we update the selected activity data with this new rep list
     const activityDataWithReps = _.merge({}, tempActivityData, {
-      selectedReps: selectedRepList
+      selectedReps: _.uniqBy(this.state.selectedOfficials, 'tempIdx')
     });
 
     console.log('activityDataWithReps', activityDataWithReps);

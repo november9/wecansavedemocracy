@@ -21,11 +21,10 @@ class RepData extends Component {
   }
 
   render() {
-    console.log('JSON.stringify(this.props.repObj.officialTitle)', JSON.stringify(this.props.repObj.officialTitle));
+
     return (
       <div>
-        {this.props.repObj.officialTitle.props.children}<br />
-        {this.props.repObj.officialAddresses[0].props.children[0].toString()}
+        stuff
       </div>
     )
   }
@@ -44,12 +43,7 @@ class UserSelectedRepList extends Component {
         style={styles.listItem}>
         <div style={styles.listItemHeader}>{repObj.officialName}</div>
         <div>
-          {repObj.officialTitle}<br />
-          {repObj.officialAddresses}
-          {repObj.officialPhones}
-          {repObj.officialParty}
-          {repObj.officialUrls}
-          {repObj.officialChannels}
+          hello
         </div>
       </li>
     )
