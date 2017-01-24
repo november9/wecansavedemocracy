@@ -20,30 +20,31 @@ const UserSelectedRepList = (props) => {
     return null;
   }
 
-  const repListItems = props.activities[props.indexOfCurrentRow].selectedReps.map((rep, key) =>
-  {
-    return (
-      <li
-        key={key}
-        style={styles.listItem}>
-        <div style={styles.listItemHeader}>{rep.officialName}</div>
-        <div>
-          {rep.officialTitle}<br />
-          {rep.officialAddresses}
-          {rep.officialPhones}
-          {rep.officialParty}
-          {rep.officialUrls}
-          {rep.officialChannels}
-        </div>
-      </li>
-    )
-  });
+  const repListItems = () => {
+    props.activities[props.indexOfCurrentRow].selectedReps.map((rep, key) => {
+      return (
+        <li
+          key={key}
+          style={styles.listItem}>
+          <div style={styles.listItemHeader}>{rep.officialName}</div>
+          <div>
+            {rep.officialTitle}<br />
+            {rep.officialAddresses}
+            {rep.officialPhones}
+            {rep.officialParty}
+            {rep.officialUrls}
+            {rep.officialChannels}
+          </div>
+        </li>
+      )
+    });
+  };
 
   return (
     <ul
       style={styles.list}
     >
-      {repListItems}
+      {repListItems()}
     </ul>
   )
 }

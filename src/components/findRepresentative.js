@@ -347,9 +347,7 @@ class FindRep extends Component {
     const tempActivityData = this.props.tempActivityData;
 
     // here we update the selected activity data with this new rep list
-    const activityDataWithReps = _.merge({}, tempActivityData, {
-      selectedReps: selectedRepList
-    });
+    const activityDataWithReps = {...tempActivityData, ...{ selectedReps: selectedRepList}};
 
     this.props.addUserActivity(activityDataWithReps);
     browserHistory.push('/');
