@@ -8,7 +8,7 @@ import TimeSelect from './TimeSelect/timeSelect';
 import TimeCommitmentSelect from './TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
-import { fetchUserActivities, deleteUserActivities } from '../actions/index';
+import { fetchUserActivities, deleteUserActivities, createCalendar } from '../actions/index';
 
 const tableCellProps = {
   whiteSpace: 'inherit',
@@ -85,7 +85,8 @@ class ActivitiesList extends Component {
         editAction: 'Edit Action',
       },
       addActionBtnLabel: 'Add An Action',
-      deleteActionsBtn: 'Delete Action(s)'
+      deleteActionsBtn: 'Delete Action(s)',
+      putOnCalendar: 'Add these actions to your calendar!'
     };
 
     this.handleRowSelection = this.handleRowSelection.bind(this);
@@ -217,8 +218,18 @@ class ActivitiesList extends Component {
               text={this.state.toolbarTitle}
               style={this.state.bodyStyle.tableToolbarText}
             />
+
+            <RaisedButton
+              label={this.state.putOnCalendar}
+              default={true}
+              onClick={() => {
+                this.props.createCalendar();
+              }}
+              type="button"
+            />
+
           </ToolbarGroup>
-          
+
           <ToolbarGroup>
             <RaisedButton
               label={this.state.deleteActionsBtn}
@@ -300,4 +311,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities, createCalendar })(ActivitiesList);

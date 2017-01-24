@@ -14,11 +14,14 @@ export const ADD_USER_ACTIVITY = 'ADD_USER_ACTIVITY';
 export const UPDATE_USER_ACTIVITY = 'UPDATE_USER_ACTIVITY';
 export const FIND_REPS_FROM_API = 'FIND_REPS_FROM_API';
 export const LOOK_FOR_REPS = 'LOOK_FOR_REPS';
+export const CREATE_CALENDAR = 'CREATE_CALENDAR';
 
 const ROOT_URL = 'http://www.wecansavedemocracy.org/wp-json/wp/v2';
 const FILTER = '?per_page=100';
 const GOOGLE_CIVIC_API_ROOT_URL = 'https://www.googleapis.com/civicinfo/v2';
 const GOOGLE_API_KEY = 'AIzaSyDzR0SxrSr1f-vrp0yPWVaDPqs1jx_lT5I';
+const ADD_EVENT_ROOT_URL = 'https://www.addevent.com/api/v1/me/calendars';
+const ADD_EVENT_API_KEY = 'ae.api25252_1484952331j2gGSe8pLxho';
 
 export function fetchActivities() {
   const request = axios.get(`${ROOT_URL}/actions`);
@@ -81,5 +84,14 @@ export function deleteUserActivities(deletedActivities) {
   return {
     type: DELETE_USER_ACTIVITIES,
     payload: deletedActivities
+  }
+}
+
+export function createCalendar() {
+  const request = axios.post(`${ADD_EVENT_ROOT_URL}/list?token=${ADD_EVENT_API_KEY}`);
+
+  return {
+    type: CREATE_CALENDAR,
+    payload: request
   }
 }
