@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import App from './components/app';
-import ActivitiesList from './components/activities_index';
-import ActivitiesNew from './components/activities_new';
-import FindRep from './components/findRepresentative';
+import App from './containers/app';
+import ActivitiesList from './containers/ActivitiesList/activities_index';
+import ActivitiesNew from './containers/ActivitiesNew/activities_new';
+import FindRep from './containers/FindRep/findRepresentative';
 
 export default (
   <Route path="/" component={App}>

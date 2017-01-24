@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { findReps, addUserActivity } from '../actions/index';
+import { findReps, addUserActivity } from '../../actions/index';
 import { TextField } from 'redux-form-material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, CircularProgress, RaisedButton, Card, CardTitle, CardText } from 'material-ui';
 import { browserHistory } from 'react-router';
@@ -347,7 +347,11 @@ class FindRep extends Component {
     const tempActivityData = this.props.tempActivityData;
 
     // here we update the selected activity data with this new rep list
-    const activityDataWithReps = {...tempActivityData, ...{ selectedReps: selectedRepList}};
+    const activityDataWithReps = _.merge({}, tempActivityData, {
+      selectedReps: selectedRepList
+    });
+
+    console.log('activityDataWithReps', activityDataWithReps);
 
     this.props.addUserActivity(activityDataWithReps);
     browserHistory.push('/');

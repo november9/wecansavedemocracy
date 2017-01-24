@@ -10,9 +10,9 @@ import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import {CircularProgress, GridList, GridTile, Card, CardTitle, CardText, Checkbox, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, RaisedButton} from 'material-ui';
 import { connect } from 'react-redux';
-import { fetchCauses, fetchActivities, fetchActivity } from '../actions/index';
+import { fetchCauses, fetchActivities, fetchActivity } from '../../actions/index';
 import { Link } from 'react-router';
-import IndividualActivity from './individual_activity';
+import IndividualActivity from '../ActivitiesList/individual_activity';
 
 let selectedCauses = [];
 let selectedActivities = [];

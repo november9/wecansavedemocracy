@@ -3,12 +3,12 @@ import _ from 'lodash';
 import { FlatButton, Toolbar, ToolbarGroup, ToolbarTitle, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import DateSelect from './DateSelect/dateSelect';
-import TimeSelect from './TimeSelect/timeSelect';
-import TimeCommitmentSelect from './TimeCommitmentSelect/timeCommitmentSelect';
-import UserSelectedRepList from './UserSelectedRepList/userSelectedRepList';
+import DateSelect from '../../components/DateSelect/dateSelect';
+import TimeSelect from '../../components/TimeSelect/timeSelect';
+import TimeCommitmentSelect from '../../components/TimeCommitmentSelect/timeCommitmentSelect';
+import UserSelectedRepList from '../../components/UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
-import { fetchUserActivities, deleteUserActivities, createCalendar } from '../actions/index';
+import { fetchUserActivities, deleteUserActivities, createCalendar } from '../../actions/index';
 
 const tableCellProps = {
   whiteSpace: 'inherit',
