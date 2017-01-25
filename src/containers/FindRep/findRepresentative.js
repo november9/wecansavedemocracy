@@ -6,20 +6,13 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import FontIcon from 'material-ui/FontIcon';
+import { renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from './renderRepData';
 
 let tempSelectedOfficials = [];
 
 class FindRep extends Component {
   constructor(props) {
     super(props);
-
-    const colors = {
-      highlight: '#ff4081',
-      highlight2: '#0097a7',
-      highlight3: '#fff',
-      headerBar: '#0097a7'
-    }
 
     const style = {
       btnStyle: {
@@ -53,26 +46,6 @@ class FindRep extends Component {
       },
       tableRowColumn: {
         padding: '10px 0'
-      },
-      officialName: {
-        color: colors.highlight,
-        margin: '0 0 5px',
-        fontSize: '125%'
-      },
-      officialPhones: {
-        padding: '0 0 5px'
-      },
-      officeName: {
-        color: colors.highlight2,
-        fontSize: '110%'
-      },
-      hyperLinks: {
-        color: colors.highlight2
-      },
-      launchIcon: {
-        color: colors.highlight3,
-        fontSize: '14px',
-        marginLeft: '5px'
       },
       addCancelBtns: {
         padding: '10px 0 0 16px'
@@ -117,102 +90,6 @@ class FindRep extends Component {
     this.setState({selectedOfficials: tempSelectedOfficials});
   }
 
-  renderChannels(channels) {
-    let channelUrl;
-
-    if (channels) {
-      return channels.map((channel, key) => {
-
-        switch(channel.type) {
-          case 'GooglePlus':
-            channelUrl = `https://plus.google.com/${channel.id}`;
-            break;
-          case 'Facebook':
-            channelUrl = `https://www.facebook.com/${channel.id}`;
-            break;
-          case 'Twitter':
-            channelUrl = `https://twitter.com/${channel.id}`;
-            break;
-          case 'YouTube':
-            channelUrl = `https://www.youtube.com/${channel.id}`;
-            break;
-        }
-
-        return (
-          <div key={key}>
-            <a
-              href={channelUrl}
-              target="_blank"
-              style={this.state.style.hyperLinks}>{channel.type}</a>
-            <FontIcon
-              className="material-icons"
-              style={this.state.style.launchIcon}>launch</FontIcon>
-          </div>
-        )
-      });
-    }
-  }
-
-  renderUrls(urls) {
-    if (urls) {
-      return urls.map((url, key) => {
-        return (
-          <div key={key}>
-            <a
-              href={url}
-              target="_blank"
-              style={this.state.style.hyperLinks}>{url}</a>
-            <FontIcon
-              className="material-icons"
-              style={this.state.style.launchIcon}>launch</FontIcon>
-          </div>
-        )
-      });
-    }
-  }
-
-  renderOfficialAddresses(addressInfo) {
-    if (addressInfo) {
-      return addressInfo.map((address, key) => {
-        return (
-          <div className="official-address" key={key}>
-            {address.line1},<br />
-            {address.city}, {address.state}, {address.address}
-          </div>
-        )
-      });
-    }
-  }
-
-  renderOfficialTitle(allData, officialKey) {
-    var officeName;
-
-    _.each(allData.offices, (office, officeKey) => {
-      return _.each(office.officialIndices, (indice, indiceKey) => {
-        if(indice === officialKey) {
-          officeName = office.name;
-          return false;
-        }
-      });
-    })
-
-    return (
-      <span style={this.state.style.officeName}>{officeName}</span>
-    )
-  }
-
-  renderOfficialPhoneNumbers (phoneNumbers) {
-    if (phoneNumbers) {
-      return phoneNumbers.map((number, key) => {
-        return (
-          <div key={key} style={this.state.style.officialPhones}>
-            {number}
-          </div>
-        )
-      });
-    }
-  }
-
   renderOfficials(officialsData) {
     return officialsData.officials.map((data, key) => {
       officialsData.officials['tempIdx'] = key;
@@ -226,12 +103,12 @@ class FindRep extends Component {
           <TableRow key={key} selected={data.selected}>
             <TableRowColumn style={this.state.style.tableRowColumn}>
               <h3 style={this.state.style.officialName}>{data.name}</h3>
-              {this.renderOfficialTitle(officialsData, key)}
-              {this.renderOfficialAddresses(data.address)}
-              {this.renderOfficialPhoneNumbers(data.phones)}
+              {renderOfficialTitle(officialsData, key)}
+              {renderOfficialAddresses(data.address)}
+              {renderOfficialPhoneNumbers(data.phones)}
               Party: <strong>{data.party}</strong>
-              {this.renderUrls(data.urls)}
-              {this.renderChannels(data.channels)}
+              {renderUrls(data.urls)}
+              {renderChannels(data.channels)}
             </TableRowColumn>
           </TableRow>
         )
@@ -332,17 +209,17 @@ class FindRep extends Component {
     // a rep seems to be firing multiple times, adding the rep multiple times
     const dedupedRepList = _.uniqBy(this.state.selectedOfficials, 'tempIdx');
 
-    dedupedRepList.map((official, key) => {
-      selectedRepList.push({
-        officialName: official.name,
-        officialTitle: this.renderOfficialTitle(this.state.representativeData, key),
-        officialAddresses: this.renderOfficialAddresses(official.address),
-        officialPhones: this.renderOfficialPhoneNumbers(official.phones),
-        officialParty: official.party,
-        officialUrls: this.renderUrls(official.urls),
-        officialChannels: this.renderChannels(official.channels)
-      });
-    });
+    // dedupedRepList.map((official, key) => {
+    //   selectedRepList.push({
+    //     officialName: official.name,
+    //     officialTitle: this.renderOfficialTitle(this.state.representativeData, key),
+    //     officialAddresses: this.renderOfficialAddresses(official.address),
+    //     officialPhones: this.renderOfficialPhoneNumbers(official.phones),
+    //     officialParty: official.party,
+    //     officialUrls: this.renderUrls(official.urls),
+    //     officialChannels: this.renderChannels(official.channels)
+    //   });
+    // });
 
     const tempActivityData = this.props.tempActivityData;
 
