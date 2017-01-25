@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from './renderRepData';
+import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from './renderRepData';
 
 let tempSelectedOfficials = [];
 
@@ -15,6 +15,11 @@ class FindRep extends Component {
     super(props);
 
     const style = {
+      officialName: {
+        color: colors.highlight,
+        margin: '0 0 5px',
+        fontSize: '125%'
+      },
       btnStyle: {
         margin: '5px 15px 0 0'
       },
@@ -91,6 +96,7 @@ class FindRep extends Component {
   }
 
   renderOfficials(officialsData) {
+    console.log('officialsData', officialsData);
     return officialsData.officials.map((data, key) => {
       officialsData.officials['tempIdx'] = key;
 
@@ -102,13 +108,11 @@ class FindRep extends Component {
         return(
           <TableRow key={key} selected={data.selected}>
             <TableRowColumn style={this.state.style.tableRowColumn}>
-              <h3 style={this.state.style.officialName}>{data.name}</h3>
-              {renderOfficialTitle(officialsData, key)}
-              {renderOfficialAddresses(data.address)}
-              {renderOfficialPhoneNumbers(data.phones)}
-              Party: <strong>{data.party}</strong>
-              {renderUrls(data.urls)}
-              {renderChannels(data.channels)}
+              <RepInfoDisplay
+                repData={data}
+                officialsData={officialsData}
+                headerStyle={style.officialName}
+              />
             </TableRowColumn>
           </TableRow>
         )
@@ -133,6 +137,8 @@ class FindRep extends Component {
 
     if (this.state.representativeData.hasOwnProperty('kind')) {
       const govtData = this.state.representativeData;
+
+      console.log('govtData', govtData);
 
       return(
         <div>
@@ -205,30 +211,14 @@ class FindRep extends Component {
   submitSelectedRepList() {
     let selectedRepList = [];
 
-    // need to dedup here because each click of the checkbox to add
-    // a rep seems to be firing multiple times, adding the rep multiple times
-    const dedupedRepList = _.uniqBy(this.state.selectedOfficials, 'tempIdx');
-
-    // dedupedRepList.map((official, key) => {
-    //   selectedRepList.push({
-    //     officialName: official.name,
-    //     officialTitle: this.renderOfficialTitle(this.state.representativeData, key),
-    //     officialAddresses: this.renderOfficialAddresses(official.address),
-    //     officialPhones: this.renderOfficialPhoneNumbers(official.phones),
-    //     officialParty: official.party,
-    //     officialUrls: this.renderUrls(official.urls),
-    //     officialChannels: this.renderChannels(official.channels)
-    //   });
-    // });
-
     const tempActivityData = this.props.tempActivityData;
 
     // here we update the selected activity data with this new rep list
     const activityDataWithReps = _.merge({}, tempActivityData, {
+      // need to dedup here because each click of the checkbox to add
+      // a rep seems to be firing multiple times, adding the rep multiple times
       selectedReps: _.uniqBy(this.state.selectedOfficials, 'tempIdx')
     });
-
-    console.log('activityDataWithReps', activityDataWithReps);
 
     this.props.addUserActivity(activityDataWithReps);
     browserHistory.push('/');

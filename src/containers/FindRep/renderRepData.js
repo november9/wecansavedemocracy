@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -10,11 +10,6 @@ export const colors = {
 }
 
 const style = {
-  officialName: {
-    color: colors.highlight,
-    margin: '0 0 5px',
-    fontSize: '125%'
-  },
   officialPhones: {
     padding: '0 0 5px'
   },
@@ -125,5 +120,25 @@ export function renderOfficialPhoneNumbers (phoneNumbers) {
         </div>
       )
     });
+  }
+}
+
+export class RepInfoDisplay extends Component {
+  constructor (props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <div>
+        <h3 style={style.officialName}>{props.repData.name}</h3>
+        {renderOfficialTitle(props.officialsData, key)}
+        {renderOfficialAddresses(props.repData.address)}
+        {renderOfficialPhoneNumbers(props.repData.phones)}
+        Party: <strong>{props.repData.party}</strong>
+        {renderUrls(props.repData.urls)}
+        {renderChannels(props.repData.channels)}
+      </div>
+    )
   }
 }

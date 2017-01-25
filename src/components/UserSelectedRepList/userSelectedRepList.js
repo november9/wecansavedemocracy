@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from '../../containers/FindRep/renderRepData';
 
 const styles = {
+  officialName: {
+    color: colors.highlight,
+    margin: '0 0 5px',
+    fontSize: '125%'
+  },
   list: {
     listStyleType: 'none',
     margin: 0,
@@ -42,6 +48,17 @@ class UserSelectedRepList extends Component {
         key={key}
         style={styles.listItem}>
         <div style={styles.listItemHeader}>{repObj.officialName}</div>
+
+
+
+        // <h3>{repObj.name}</h3>
+        // {renderOfficialTitle(officialsData, key)}
+        // {renderOfficialAddresses(repObj.address)}
+        // {renderOfficialPhoneNumbers(repObj.phones)}
+        // Party: <strong>{repObj.party}</strong>
+        // {renderUrls(repObj.urls)}
+        // {renderChannels(repObj.channels)}
+
         <div>
           hello
         </div>
@@ -50,7 +67,6 @@ class UserSelectedRepList extends Component {
   }
 
   repListItems () {
-    console.log('this.props.activities[this.props.indexOfCurrentRow].selectedReps', this.props.activities[this.props.indexOfCurrentRow].selectedReps);
     return this.props.activities[this.props.indexOfCurrentRow].selectedReps.map((rep, key) => {
 
       return (
@@ -58,7 +74,10 @@ class UserSelectedRepList extends Component {
           key={key}
           style={styles.listItem}>
           <div style={styles.listItemHeader}>{rep.officialName}</div>
-          <RepData key={key} repObj={rep} />
+          <RepInfoDisplay
+            repData={rep}
+            officialsData={this.props.activities}
+          />
         </li>
       )
     });
