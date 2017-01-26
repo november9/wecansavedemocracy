@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { RaisedButton } from 'material-ui';
+import { createCalendar } from '../../actions/index';
+import { connect } from 'react-redux';
 
 class CalendarImport extends Component {
   constructor (props) {
     super (props);
 
     this.state = {
-      putOnCalendar: 'Add these actions to your calendar!'
+      putOnCalendar: 'Add these actions to your calendar!',
+      calendarTitle: 'Democracy Action Agenda',
+      calendarDescription: 'My action agenda for effecting political change!'
     }
   }
 
-  importToCalendar (userActivities) {
-    console.log('userActivities from Import', userActivities);
+  importToCalendar () {
+    this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
+    then((response) => {
+      console.log('response', response);
+    })
   }
 
   render () {
@@ -28,4 +35,10 @@ class CalendarImport extends Component {
   }
 }
 
-export default CalendarImport;
+function mapStateToProps(state) {
+  return {
+    calendar: state.calendar.calendar
+  }
+}
+
+export default connect(mapStateToProps, { createCalendar })(CalendarImport);

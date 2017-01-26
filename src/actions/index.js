@@ -87,8 +87,22 @@ export function deleteUserActivities(deletedActivities) {
   }
 }
 
-export function createCalendar() {
-  const request = axios.post(`${ADD_EVENT_ROOT_URL}/list?token=${ADD_EVENT_API_KEY}`);
+export function createCalendar(calendarTitle, calendarDescription) {
+  const encodedCalendarTitle = encodeURIComponent(calendarTitle).replace(/%20/g,'+')
+  const encodedCalendarDescription = encodeURIComponent(calendarDescription).replace(/%20/g,'+')
+
+  const encodedEndpoint = encodeURI(`${ADD_EVENT_ROOT_URL}/create/?token=${ADD_EVENT_API_KEY}&title=${encodedCalendarTitle}&description=encodedCalendarDescription`);
+
+  const request = axios.post(encodedEndpoint);
+
+  return {
+    type: CREATE_CALENDAR,
+    payload: request
+  }
+}
+
+export function createEvent(eventData) {
+  const request = axios.post(`${ADD_EVENT_ROOT_URL}/events/create?token=${ADD_EVENT_API_KEY}`);
 
   return {
     type: CREATE_CALENDAR,

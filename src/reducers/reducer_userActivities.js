@@ -11,8 +11,6 @@ const INITIAL_STATE = {
 };
 
 export default function (state = INITIAL_STATE, action) {
-  console.log('state', state);
-
   switch(action.type) {
   case ADD_USER_ACTIVITY:
     state.all.push(action.payload);
