@@ -60,7 +60,6 @@ class UserSelectedRepList extends Component {
   }
 
   render () {
-    console.log('this.props.activities', this.props.activities);
     if (!this.props.activities[this.props.indexOfCurrentRow].hasOwnProperty('selectedReps')) {
       return null;
     }

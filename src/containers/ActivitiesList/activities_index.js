@@ -9,6 +9,7 @@ import TimeCommitmentSelect from '../../components/TimeCommitmentSelect/timeComm
 import UserSelectedRepList from '../../components/UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
 import { fetchUserActivities, deleteUserActivities, createCalendar } from '../../actions/index';
+import CalendarImport from '../../components/CalendarImport/calendarImport';
 
 const tableCellProps = {
   whiteSpace: 'inherit',
@@ -85,8 +86,7 @@ class ActivitiesList extends Component {
         editAction: 'Edit Action',
       },
       addActionBtnLabel: 'Add An Action',
-      deleteActionsBtn: 'Delete Action(s)',
-      putOnCalendar: 'Add these actions to your calendar!'
+      deleteActionsBtn: 'Delete Action(s)'
     };
 
     this.handleRowSelection = this.handleRowSelection.bind(this);
@@ -220,13 +220,8 @@ class ActivitiesList extends Component {
               style={this.state.bodyStyle.tableToolbarText}
             />
 
-            <RaisedButton
-              label={this.state.putOnCalendar}
-              default={true}
-              onClick={() => {
-                this.props.createCalendar();
-              }}
-              type="button"
+            <CalendarImport
+              userActivities={this.state.userActivities}
             />
 
           </ToolbarGroup>
