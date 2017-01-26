@@ -8,7 +8,7 @@ import TimeSelect from '../../components/TimeSelect/timeSelect';
 import TimeCommitmentSelect from '../../components/TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from '../../components/UserSelectedRepList/userSelectedRepList';
 import moment from 'moment';
-import { fetchUserActivities, deleteUserActivities, createCalendar } from '../../actions/index';
+import { fetchUserActivities, deleteUserActivities } from '../../actions/index';
 import CalendarImport from '../../components/CalendarImport/calendarImport';
 
 const tableCellProps = {

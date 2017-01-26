@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RaisedButton } from 'material-ui';
-import { createCalendar } from '../../actions/index';
+import { createCalendar, createEvent } from '../../actions/index';
 import { connect } from 'react-redux';
 
 class CalendarImport extends Component {
@@ -14,10 +14,23 @@ class CalendarImport extends Component {
     }
   }
 
+  this.addActivitiesToCalendar(userActivities, calendarId) {
+    userActivities.forEach((val) => {
+      this.props.createEvent(val, calendarId)
+    });
+  }
+
   importToCalendar () {
+    console.log('this.props.calendar', this.props.calendar);
+    if (this.props.calendar.data.calendar.id) {
+      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id)
+    }
+
+
+
     this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
     then((response) => {
-      console.log('response', response);
+      console.log('response.payload.data.calendar.id', response.payload.data.calendar.id);
     })
   }
 
@@ -41,4 +54,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { createCalendar })(CalendarImport);
+export default connect(mapStateToProps, { /*getCalendar,*/ createCalendar, createEvent })(CalendarImport);
