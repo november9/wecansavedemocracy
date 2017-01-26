@@ -129,15 +129,17 @@ export class RepInfoDisplay extends Component {
   }
 
   render () {
+
+
     return (
       <div>
-        <h3 style={style.officialName}>{props.repData.name}</h3>
-        {renderOfficialTitle(props.officialsData, key)}
-        {renderOfficialAddresses(props.repData.address)}
-        {renderOfficialPhoneNumbers(props.repData.phones)}
-        Party: <strong>{props.repData.party}</strong>
-        {renderUrls(props.repData.urls)}
-        {renderChannels(props.repData.channels)}
+        <h3 style={style.officialName}>{this.props.repData.name}</h3>
+        {renderOfficialTitle(this.props.officialsData, this.props.key)}
+        {renderOfficialAddresses(this.props.repData.address)}
+        {renderOfficialPhoneNumbers(this.props.repData.phones)}
+        Party: <strong>{this.props.repData.party}</strong>
+        {renderUrls(this.props.repData.urls)}
+        {renderChannels(this.props.repData.channels)}
       </div>
     )
   }

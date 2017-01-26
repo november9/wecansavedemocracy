@@ -42,30 +42,6 @@ class UserSelectedRepList extends Component {
     super(props);
   }
 
-  renderIndivReps (repObj, key) {
-    return (
-      <li
-        key={key}
-        style={styles.listItem}>
-        <div style={styles.listItemHeader}>{repObj.officialName}</div>
-
-
-
-        // <h3>{repObj.name}</h3>
-        // {renderOfficialTitle(officialsData, key)}
-        // {renderOfficialAddresses(repObj.address)}
-        // {renderOfficialPhoneNumbers(repObj.phones)}
-        // Party: <strong>{repObj.party}</strong>
-        // {renderUrls(repObj.urls)}
-        // {renderChannels(repObj.channels)}
-
-        <div>
-          hello
-        </div>
-      </li>
-    )
-  }
-
   repListItems () {
     return this.props.activities[this.props.indexOfCurrentRow].selectedReps.map((rep, key) => {
 
@@ -84,6 +60,7 @@ class UserSelectedRepList extends Component {
   }
 
   render () {
+    console.log('this.props.activities', this.props.activities);
     if (!this.props.activities[this.props.indexOfCurrentRow].hasOwnProperty('selectedReps')) {
       return null;
     }

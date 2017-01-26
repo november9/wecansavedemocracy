@@ -8,54 +8,55 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from './renderRepData';
 
+const style = {
+  officialName: {
+    color: colors.highlight,
+    margin: '0 0 5px',
+    fontSize: '125%'
+  },
+  btnStyle: {
+    margin: '5px 15px 0 0'
+  },
+  cardStyle: {
+    paddingBottom: '25px'
+  },
+  addressField: {
+    width: '100%'
+  },
+  loadingIconContainer: {
+    textAlign: 'center',
+    padding: '20px 0'
+  },
+  tableHeader: {
+    paddingLeft: 0,
+    fontSize: '18px'
+  },
+  tableDescription: {
+    fontSize: '18px',
+    margin: '0 16px',
+    padding: '15px',
+    backgroundColor: colors.headerBar,
+    color: 'white',
+    fontWeight: 'normal'
+  },
+  tableRow: {
+    padding: '15px 0',
+    lineHeight: '1.5'
+  },
+  tableRowColumn: {
+    padding: '10px 0'
+  },
+  addCancelBtns: {
+    padding: '10px 0 0 16px'
+  }
+}
+
 let tempSelectedOfficials = [];
 
 class FindRep extends Component {
   constructor(props) {
     super(props);
 
-    const style = {
-      officialName: {
-        color: colors.highlight,
-        margin: '0 0 5px',
-        fontSize: '125%'
-      },
-      btnStyle: {
-        margin: '5px 15px 0 0'
-      },
-      cardStyle: {
-        paddingBottom: '25px'
-      },
-      addressField: {
-        width: '100%'
-      },
-      loadingIconContainer: {
-        textAlign: 'center',
-        padding: '20px 0'
-      },
-      tableHeader: {
-        paddingLeft: 0,
-        fontSize: '18px'
-      },
-      tableDescription: {
-        fontSize: '18px',
-        margin: '0 16px',
-        padding: '15px',
-        backgroundColor: colors.headerBar,
-        color: 'white',
-        fontWeight: 'normal'
-      },
-      tableRow: {
-        padding: '15px 0',
-        lineHeight: '1.5'
-      },
-      tableRowColumn: {
-        padding: '10px 0'
-      },
-      addCancelBtns: {
-        padding: '10px 0 0 16px'
-      }
-    }
 
     this.state = {
       cardTitleText: 'Find your local representative by entering your home address',
@@ -96,7 +97,6 @@ class FindRep extends Component {
   }
 
   renderOfficials(officialsData) {
-    console.log('officialsData', officialsData);
     return officialsData.officials.map((data, key) => {
       officialsData.officials['tempIdx'] = key;
 
@@ -107,7 +107,7 @@ class FindRep extends Component {
 
         return(
           <TableRow key={key} selected={data.selected}>
-            <TableRowColumn style={this.state.style.tableRowColumn}>
+            <TableRowColumn style={style.tableRowColumn}>
               <RepInfoDisplay
                 repData={data}
                 officialsData={officialsData}
@@ -137,8 +137,6 @@ class FindRep extends Component {
 
     if (this.state.representativeData.hasOwnProperty('kind')) {
       const govtData = this.state.representativeData;
-
-      console.log('govtData', govtData);
 
       return(
         <div>
