@@ -152,7 +152,8 @@ class ActivitiesList extends Component {
   deleteActivities(selectedActivities) {
     this.props.deleteUserActivities(this.state.userActivities);
     this.setState({
-      userActivities: this.state.userActivities
+      userActivities: this.state.userActivities,
+      indexOfSelectedRow: null
     }, () => this.handleRowSelection('none'));
   }
 
