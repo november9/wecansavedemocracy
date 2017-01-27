@@ -10,13 +10,53 @@ class CalendarImport extends Component {
     this.state = {
       putOnCalendar: 'Add these actions to your calendar!',
       calendarTitle: 'Democracy Action Agenda',
-      calendarDescription: 'My action agenda for effecting political change!'
+      calendarDescription: 'My action agenda for effecting political change!',
+      calendarNoLocation: 'anywhere!'
     }
   }
 
-  this.addActivitiesToCalendar(userActivities, calendarId) {
+  convertUserActivityToCalendarEvent(userActivity) {
+
+    console.log('userActivity', userActivity);
+
+    let streetAddressProperties = [
+      userActivity.acf.street_address_1,
+      userActivity.acf.street_address_2,
+      userActivity.acf.city,
+      userActivity.acf.state,
+      userActivity.acf.zip
+    ];
+
+
+    function generateStringVal (arrayOfStrings) {
+      let currString = '';
+      let stringArr = [];
+
+      arrayOfStrings.forEach((val, key) => {
+        currString = '';
+        if (val && typeof val === 'string' && val.length >= 2) {
+          currString = ((key > 0 && key !== (arrayOfStrings.length - 1)) ? ', ' : '') + val;
+          stringArr.push(currString);
+        }
+      });
+
+      return stringArr.join('');
+    }
+
+    const urlString = {
+      title: userActivity.title.rendered,
+      description: userActivity.content.rendered,
+      location: generateStringVal(streetAddressProperties)
+    }
+
+    console.log('urlString', urlString);
+
+  }
+
+  addActivitiesToCalendar(userActivities, calendarId) {
     userActivities.forEach((val) => {
-      this.props.createEvent(val, calendarId)
+      this.convertUserActivityToCalendarEvent(val);
+      //this.props.createEvent(val, calendarId)
     });
   }
 
@@ -24,14 +64,12 @@ class CalendarImport extends Component {
     console.log('this.props.calendar', this.props.calendar);
     if (this.props.calendar.data.calendar.id) {
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id)
+    } else {
+      this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
+      then((response) => {
+        console.log('response.payload.data.calendar.id', response.payload.data.calendar.id);
+      })
     }
-
-
-
-    this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
-    then((response) => {
-      console.log('response.payload.data.calendar.id', response.payload.data.calendar.id);
-    })
   }
 
   render () {

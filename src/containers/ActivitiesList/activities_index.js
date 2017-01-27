@@ -307,4 +307,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities, createCalendar })(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);
