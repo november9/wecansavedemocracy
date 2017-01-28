@@ -68,6 +68,12 @@ class CalendarImport extends Component {
       start_date: getStartDateTime()
     }
 
+    const optionalProps = {
+      all_day_event: true
+    }
+
+    finalUrlString = _.merge({}, urlString, optionalProps);
+
     console.log('urlString', urlString);
 
   }
