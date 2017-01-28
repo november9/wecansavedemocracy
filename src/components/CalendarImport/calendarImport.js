@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { RaisedButton } from 'material-ui';
 import { createCalendar, createEvent } from '../../actions/index';
 import { connect } from 'react-redux';
+import addLeadingZeros from '../../utils/addLeadingZeros';
+import moment from 'moment';
 
 class CalendarImport extends Component {
   constructor (props) {
@@ -43,10 +45,27 @@ class CalendarImport extends Component {
       return stringArr.join('');
     }
 
+    function getTimezoneByLocation () {
+      // timezone list here: https://www.addevent.com/zones, for now going to
+      // hard-code this for dev purposes
+      return 'America/Chicago'
+    }
+
+    function getStartDateTime () {
+      // return current date/time if there is no timeInMilliseconds property
+      if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number') {
+        return moment(userActivity.timeInMilliseconds).format('MM/DD/YYYY HH:mm');
+      } else {
+        return moment().format('MM/DD/YYYY HH:mm');
+      }
+    }
+
     const urlString = {
       title: userActivity.title.rendered,
       description: userActivity.content.rendered,
-      location: generateStringVal(streetAddressProperties)
+      location: generateStringVal(streetAddressProperties),
+      timezone: getTimezoneByLocation(),
+      start_date: getStartDateTime()
     }
 
     console.log('urlString', urlString);
