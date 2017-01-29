@@ -3,6 +3,7 @@ import { RaisedButton } from 'material-ui';
 import { createCalendar, createEvent } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
+import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
 
@@ -19,6 +20,7 @@ class CalendarImport extends Component {
   }
 
   generateCalendarEventQueryStr(userActivity) {
+    let isAllDayEvent = false;
 
     let streetAddressProperties = [
       userActivity.acf.street_address_1,
@@ -28,7 +30,6 @@ class CalendarImport extends Component {
       userActivity.acf.zip
     ];
 
-
     function generateStringVal (arrayOfStrings) {
       let currString = '';
       let stringArr = [];
@@ -37,6 +38,7 @@ class CalendarImport extends Component {
         currString = '';
         if (val && typeof val === 'string' && val.length >= 2) {
           currString = ((key > 0 && key !== (arrayOfStrings.length - 1)) ? ', ' : '') + val;
+          currString = convertHtmlSymbols(currString);
           stringArr.push(currString);
         }
       });
@@ -52,10 +54,12 @@ class CalendarImport extends Component {
 
     function getStartDateTime () {
       // return current date/time if there is no timeInMilliseconds property
-      if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number') {
+      if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number' && userActivity.acf.date.length) {
+        isAllDayEvent = false;
         return moment(userActivity.timeInMilliseconds).format('MM/DD/YYYY HH:mm');
       } else {
-        return moment().format('MM/DD/YYYY HH:mm');
+        isAllDayEvent = true;
+        return moment().format('MM/DD/YYYY 00:00');
       }
     }
 
@@ -67,7 +71,7 @@ class CalendarImport extends Component {
     const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g,'+');
     const timezone = getTimezoneByLocation();
     const start_date = encodeURIComponent(getStartDateTime());
-    const all_day_event = userActivity.acf.start_hour ? false : true;
+    const all_day_event = isAllDayEvent;
 
     return 'title=' + title + '&description=' + description + '&location=' + location + '&timezone=' + timezone + '&start_date=' + start_date + '&all_day_event=' + all_day_event;
 
@@ -81,16 +85,12 @@ class CalendarImport extends Component {
   }
 
   importToCalendar () {
-    console.log('this.props.calendar', this.props.calendar);
-    if (this.props.calendar.data.calendar.id) {
-      console.log('we have a calendar');
+    if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
     } else {
-      console.log('no ID!');
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
-        console.log('response', response);
-        //this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
+        this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
       })
     }
   }
