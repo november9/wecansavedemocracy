@@ -4,6 +4,7 @@ import { createCalendar, createEvent } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
 import moment from 'moment';
+import striptags from 'striptags';
 
 class CalendarImport extends Component {
   constructor (props) {
@@ -17,9 +18,7 @@ class CalendarImport extends Component {
     }
   }
 
-  convertUserActivityToCalendarEvent(userActivity) {
-
-    console.log('userActivity', userActivity);
+  generateCalendarEventQueryStr(userActivity) {
 
     let streetAddressProperties = [
       userActivity.acf.street_address_1,
@@ -60,39 +59,38 @@ class CalendarImport extends Component {
       }
     }
 
-    const urlString = {
-      title: userActivity.title.rendered,
-      description: userActivity.content.rendered,
-      location: generateStringVal(streetAddressProperties),
-      timezone: getTimezoneByLocation(),
-      start_date: getStartDateTime()
-    }
+    const descNoHtml = striptags(userActivity.content.rendered);
+    const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
 
-    const optionalProps = {
-      all_day_event: true
-    }
+    const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');
+    const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g,'+');
+    const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g,'+');
+    const timezone = getTimezoneByLocation();
+    const start_date = encodeURIComponent(getStartDateTime());
+    const all_day_event = userActivity.acf.start_hour ? false : true;
 
-    finalUrlString = _.merge({}, urlString, optionalProps);
-
-    console.log('urlString', urlString);
+    return 'title=' + title + '&description=' + description + '&location=' + location + '&timezone=' + timezone + '&start_date=' + start_date + '&all_day_event=' + all_day_event;
 
   }
 
   addActivitiesToCalendar(userActivities, calendarId) {
     userActivities.forEach((val) => {
-      this.convertUserActivityToCalendarEvent(val);
-      //this.props.createEvent(val, calendarId)
+      const queryString = this.generateCalendarEventQueryStr(val);
+      this.props.createEvent(queryString, calendarId)
     });
   }
 
   importToCalendar () {
     console.log('this.props.calendar', this.props.calendar);
     if (this.props.calendar.data.calendar.id) {
-      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id)
+      console.log('we have a calendar');
+      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
     } else {
+      console.log('no ID!');
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
-        console.log('response.payload.data.calendar.id', response.payload.data.calendar.id);
+        console.log('response', response);
+        //this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
       })
     }
   }
