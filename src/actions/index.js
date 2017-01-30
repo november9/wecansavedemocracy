@@ -16,6 +16,7 @@ export const FIND_REPS_FROM_API = 'FIND_REPS_FROM_API';
 export const LOOK_FOR_REPS = 'LOOK_FOR_REPS';
 export const CREATE_CALENDAR = 'CREATE_CALENDAR';
 export const CREATE_EVENT = 'CREATE_EVENT';
+export const FETCH_CALENDAR_EVENTS = 'FETCH_CALENDAR_EVENTS';
 
 const ROOT_URL = 'http://www.wecansavedemocracy.org/wp-json/wp/v2';
 const FILTER = '?per_page=100';
@@ -88,6 +89,15 @@ export function deleteUserActivities(deletedActivities) {
   }
 }
 
+export function fetchCalendarEvents(calendarId) {
+  const request = axios.get(`${ADD_EVENT_ROOT_URL}/events/list?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}`);
+
+  return {
+    type: FETCH_CALENDAR_EVENTS,
+    payload: request
+  }
+}
+
 export function createCalendar(calendarTitle, calendarDescription) {
   const encodedCalendarTitle = encodeURIComponent(calendarTitle).replace(/%20/g,'+')
   const encodedCalendarDescription = encodeURIComponent(calendarDescription).replace(/%20/g,'+')
@@ -103,11 +113,7 @@ export function createCalendar(calendarTitle, calendarDescription) {
 }
 
 export function createEvent(queryString, calendarId) {
-  console.log(`${ADD_EVENT_ROOT_URL}/events/create?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}&${queryString}`);
-  console.log('calendarId', calendarId)
   const request = axios.post(`${ADD_EVENT_ROOT_URL}/events/create?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}&${queryString}`);
-
-  console.log('request', request);
 
   return {
     type: CREATE_EVENT,

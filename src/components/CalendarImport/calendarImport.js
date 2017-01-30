@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RaisedButton } from 'material-ui';
-import { createCalendar, createEvent } from '../../actions/index';
+import { createCalendar, createEvent, fetchCalendarEvents } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
@@ -49,12 +49,13 @@ class CalendarImport extends Component {
     function getTimezoneByLocation () {
       // timezone list here: https://www.addevent.com/zones, for now going to
       // hard-code this for dev purposes
+      // or better yet, API call to here: https://www.addevent.com/api/v1/timezones
       return 'America/Chicago'
     }
 
     function getStartDateTime () {
       // return current date/time if there is no timeInMilliseconds property
-      if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number' && userActivity.acf.date.length) {
+      if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number' && userActivity.acf.date && userActivity.acf.date.length) {
         isAllDayEvent = false;
         return moment(userActivity.timeInMilliseconds).format('MM/DD/YYYY HH:mm');
       } else {
@@ -78,6 +79,9 @@ class CalendarImport extends Component {
   }
 
   addActivitiesToCalendar(userActivities, calendarId) {
+    const eventList = this.props.fetchCalendarEvents(calendarId);
+    console.log('eventList', eventList);
+
     userActivities.forEach((val) => {
       const queryString = this.generateCalendarEventQueryStr(val);
       this.props.createEvent(queryString, calendarId)
@@ -115,4 +119,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { /*getCalendar,*/ createCalendar, createEvent })(CalendarImport);
+export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent })(CalendarImport);
