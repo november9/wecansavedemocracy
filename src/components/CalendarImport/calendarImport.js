@@ -79,13 +79,23 @@ class CalendarImport extends Component {
   }
 
   addActivitiesToCalendar(userActivities, calendarId) {
+    // get list of calendar events
     const eventList = this.props.fetchCalendarEvents(calendarId);
     console.log('eventList', eventList);
 
+    // if you know the eventId you can save
+
+    // but how do you check if it's an existing calendar event?
+
+    // for each user activity...
     userActivities.forEach((val) => {
+      // generate a query string
       const queryString = this.generateCalendarEventQueryStr(val);
-      this.props.createEvent(queryString, calendarId)
+      this.props.createEvent(queryString, calendarId);
     });
+
+    console.log('this.props.calendar', this.props.calendar);
+
   }
 
   importToCalendar () {

@@ -13,7 +13,7 @@ The API for the actions and events is served via (don't laugh) WordPress using t
 5. There are 2 radio buttons that allow the user to re-sort the list from most to least time commitment
 6. The user clicks the "Add Action" button to select the action they want to add to their list
 7. If the action involves contacting a government official, they are taken to a page where they can add the representatives who represent their home address, and they can select as many of those representatives as they like. Once they select their representative(s), then their they add the action to the list from a button at the bottom of the page
-8. Once an action is added, the user is taken back to the home screen/master list, and repeats the process to ad as many actions as they like.
+8. Once an action is added, the user is taken back to the home screen/master list, and repeats the process to add as many actions as they like.
 9. By default, any action that is not an event, defaults to being set to today's date. The user can click an "edit" button in the table row, which will allow them to change the start date, start time, and time commitment.
 10. Once the user has added all of their actions/events, then they can click on an "add to calendar" button at the top of the page to add the list to the calendar of their choice.
 
