@@ -90,7 +90,7 @@ export function deleteUserActivities(deletedActivities) {
 }
 
 export function fetchCalendarEvents(calendarId) {
-  const request = axios.get(`${ADD_EVENT_ROOT_URL}/events/list?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}`);
+  const request = axios.get(`${ADD_EVENT_ROOT_URL}/events/list/?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}`);
 
   return {
     type: FETCH_CALENDAR_EVENTS,
@@ -113,7 +113,7 @@ export function createCalendar(calendarTitle, calendarDescription) {
 }
 
 export function createEvent(queryString, calendarId) {
-  const request = axios.post(`${ADD_EVENT_ROOT_URL}/events/create?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}&${queryString}`);
+  const request = axios.post(`${ADD_EVENT_ROOT_URL}/events/create/?token=${ADD_EVENT_API_KEY}&calendar_id=${calendarId}&${queryString}`);
 
   return {
     type: CREATE_EVENT,
