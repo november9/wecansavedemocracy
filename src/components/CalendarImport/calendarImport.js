@@ -6,7 +6,7 @@ import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
-import './css/theme3.css';
+import CalendarPickerButtons from '../CalendarPickerButtons/calendarPickerButtons';
 
 const styles = {
   calendarDialog: {
@@ -108,11 +108,6 @@ class CalendarImport extends Component {
     this.setState({calendarChoiceDialogOpen: false});
   };
 
-  triggerCalendarExport (calendarType) {
-    console.log('this.props.calendar.data.calendar.uniquekey', this.props.calendar.data.calendar.uniquekey);
-    const calendarUrl = 'http://addevent.com/subscribe/?' + this.props.calendar.data.calendar.uniquekey + '+' + calendarType;
-    var win = window.open(calendarUrl, '_blank');
-  }
 
   addActivitiesToCalendar(userActivities, calendarId) {
     // get list of calendar events
@@ -147,61 +142,28 @@ class CalendarImport extends Component {
   render () {
     return (
       <div>
+        <RaisedButton
+          label={this.state.putOnCalendar}
+          default={true}
+          onClick={() => {
+            this.importToCalendar(this.props.userActivities);
+          }}
+          type="button"
+        />
 
-      <RaisedButton
-        label={this.state.putOnCalendar}
-        default={true}
-        onClick={() => {
-          this.importToCalendar(this.props.userActivities);
-        }}
-        type="button"
-      />
+        <Dialog
+          actions={this.state.closeBtn}
+          modal={true}
+          open={this.state.calendarChoiceDialogOpen}
+          contentStyle={this.state.styles.calendarDialog}
+        >
+          <h3>{this.state.calendarModalText}</h3>
 
-      <Dialog
-        actions={this.state.closeBtn}
-        modal={true}
-        open={this.state.calendarChoiceDialogOpen}
-        contentStyle={this.state.styles.calendarDialog}
-      >
-        <h3>{this.state.calendarModalText}</h3>
-
-        <div className="calendarBtnContainer">
-          <span
-            className="ateappleical"
-            id="addeventstc3-appleical"
-            role="button">
-              Apple Calendar
-          </span>
-          <span
-            className="ategoogle"
-            id="addeventstc3-google"
-            role="button">
-              Google <em>(online)</em>
-          </span>
-          <span className=
-            "ateoutlook"
-            id="addeventstc3-outlook"
-            role="button">
-              Outlook
-            </span>
-          <span
-            className="ateoutlookcom"
-            id="addeventstc3-outlookcom"
-            role="button">
-              Outlook.com <em>(online)</em>
-          </span>
-          <span
-            className="ateyahoo"
-            id="addeventstc3-yahoo"
-            role="button">
-            Yahoo <em>(online)</em>
-          </span>
-        </div>
-
-
-      </Dialog>
+          <CalendarPickerButtons
+            uniqueKey={this.props.calendar.data.calendar.uniquekey}
+          />
+        </Dialog>
       </div>
-
     )
   }
 }

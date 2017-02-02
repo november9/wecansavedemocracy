@@ -59,6 +59,4 @@ class UserSelectedRepList extends Component {
 }
 
 
-//export default connect(mapStateTothis.props, {})(IndividualActivity);
-
 export default UserSelectedRepList;
