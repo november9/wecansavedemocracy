@@ -1,0 +1,157 @@
+.addeventstc {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    z-index: 999998;
+    background: #2878eb;
+    cursor: pointer;
+    font-family: Roboto, "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+    color: #fff!important;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 100%;
+    text-decoration: none;
+    padding: 14px 44px 14px 20px;
+}
+
+.addeventstc:hover {
+    color: #fff;
+    font-size: 17px;
+    text-decoration: none;
+    background-color: #2c84f4;
+}
+
+.addeventstc:active {
+    top: 1px;
+}
+
+.addeventstc .arrow {
+    width: 15px;
+    height: 10px;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -5px;
+    background: url(../gfx/icon-arrow-t1.png) no-repeat;
+}
+
+.addeventstc .addeventstc_icon {
+    display: none;
+}
+
+.addeventstc-selected {
+    background-color: #2c84f4;
+}
+
+
+/* The drop down */
+
+.addeventstc_dropdown {
+    width: 100%;
+    position: absolute;
+    z-index: 99999;
+    padding: 6px 0px 0px 0px;
+    background: #fff;
+    text-align: left;
+    display: none;
+    margin-top: 0;
+    margin-left: -1px;
+    border-top: 1px solid #c8c8c8;
+    border-right: 1px solid #bebebe;
+    border-bottom: 1px solid #a8a8a8;
+    border-left: 1px solid #bebebe;
+    -webkit-box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.addeventstc_dropdown span {
+    display: block;
+    line-height: 100%;
+    background: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    color: #333;
+    padding: 9px 10px 9px 40px;
+}
+
+.addeventstc_dropdown span:hover {
+    background-color: #f4f4f4;
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.addeventstc_dropdown em {
+    color: #999!important;
+    font-size: 12px!important;
+}
+
+.addeventstc_dropdown .frs {
+    background: #fff;
+    color: #cacaca!important;
+    cursor: pointer;
+    font-size: 9px!important;
+    font-style: normal!important;
+    font-weight: normal!important;
+    line-height: 110%!important;
+    padding-left: 10px;
+    position: absolute;
+    right: 10px;
+    text-align: right;
+    text-decoration: none;
+    top: 5px;
+    z-index: 101;
+}
+
+.addeventstc_dropdown .frs:hover {
+    color: #999!important;
+}
+
+.addeventstc_dropdown .ateappleical {
+    background-image: url(../gfx/dropdown-apple-t1.png);
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+}
+
+.addeventstc_dropdown .ateoutlook {
+    background-image: url(../gfx/dropdown-outlook-t1.png);
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+}
+
+.addeventstc_dropdown .ateoutlookcom {
+    background-image: url(../gfx/dropdown-outlook-t1.png);
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+}
+
+.addeventstc_dropdown .ategoogle {
+    background-image: url(../gfx/dropdown-google-t1.png);
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+}
+
+.addeventstc_dropdown .ateyahoo {
+    background-image: url(../gfx/dropdown-yahoo-t1.png);
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+}
+
+.addeventstc_dropdown .copyx {
+    height: 21px;
+    display: block;
+    position: relative;
+    cursor: default;
+}
+
+.addeventstc_dropdown .brx {
+    height: 1px;
+    overflow: hidden;
+    background: #e0e0e0;
+    position: absolute;
+    z-index: 100;
+    left: 10px;
+    right: 10px;
+    top: 9px;
+}
