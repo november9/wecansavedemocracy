@@ -6,6 +6,7 @@ import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
+import './css/theme3.css';
 
 class CalendarImport extends Component {
   constructor (props) {
@@ -46,6 +47,8 @@ class CalendarImport extends Component {
       return stringArr.join('');
     }
 
+    // TODO: make this dynamic so we can make it a fallback? Not using for now, getting
+    // this data from the API for now.
     function getTimezoneByLocation () {
       // timezone list here: https://www.addevent.com/zones, for now going to
       // hard-code this for dev purposes
@@ -70,8 +73,8 @@ class CalendarImport extends Component {
     const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');
     const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g,'+');
     const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g,'+');
-    const timezone = getTimezoneByLocation();
-    const start_date = encodeURIComponent(getStartDateTime());
+    const timezone = encodeURIComponent(userActivity.acf.timezone);
+     start_date = encodeURIComponent(getStartDateTime());
     const all_day_event = isAllDayEvent;
 
     return 'title=' + title + '&description=' + description + '&location=' + location + '&timezone=' + timezone + '&start_date=' + start_date + '&all_day_event=' + all_day_event;
@@ -94,8 +97,14 @@ class CalendarImport extends Component {
       this.props.createEvent(queryString, calendarId);
     });
 
-    console.log('this.props.calendar', this.props.calendar);
 
+
+    console.log('this.props.calendar.data.calendar.uniquekey', this.props.calendar.data.calendar.uniquekey);
+
+    const calendarUrl = 'http://addevent.com/subscribe/?' + this.props.calendar.data.calendar.uniquekey + '+google';
+
+    var win = window.open(calendarUrl, '_blank');
+    win.focus();
   }
 
   importToCalendar () {
@@ -110,15 +119,25 @@ class CalendarImport extends Component {
   }
 
   render () {
+    window.addeventasync = function(){
+      addeventstc.settings({
+          license    : "auYdxlyGjzxZCenXymdJ25252",
+          css        : false,
+          google     : {show:true, text:"Google <em>(online)</em>"},
+      		outlook    : {show:true, text:"Outlook"},
+      		yahoo      : {show:true, text:"Yahoo <em>(online)</em>"},
+      		outlookcom : {show:true, text:"Outlook.com <em>(online)</em>"},
+      		appleical  : {show:true, text:"Apple Calendar"},
+      		dropdown   : {order:"google,appleical,outlook,outlookcom,yahoo"}
+      });
+    };
+
     return (
-      <RaisedButton
-        label={this.state.putOnCalendar}
-        default={true}
-        onClick={() => {
-          this.importToCalendar(this.props.userActivities);
-        }}
-        type="button"
-      />
+      <div title="Add to Calendar" className="addeventstc" data-id={this.props.calendar.data.calendar.uniquekey}>
+    	    Add to Calendar
+    	    <span className="arrow">&nbsp;</span>
+    	</div>
+
     )
   }
 }

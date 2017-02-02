@@ -28,6 +28,8 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-preset-stage-1": "^6.1.18",
+    "css-loader": "^0.26.1",
+    "file-loader": "^0.10.0",
     "lodash": "^4.17.2",
     "material-design-icons": "^3.0.1",
     "material-ui": "^0.16.7",
@@ -41,6 +43,7 @@
     "redux-form": "^6.4.2",
     "redux-form-material-ui": "^4.1.2",
     "redux-promise": "^0.5.3",
-    "striptags": "^2.2.1"
+    "striptags": "^2.2.1",
+    "style-loader": "^0.13.1"
   }
 }
