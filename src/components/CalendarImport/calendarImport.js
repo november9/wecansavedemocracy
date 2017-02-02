@@ -8,6 +8,13 @@ import moment from 'moment';
 import striptags from 'striptags';
 import './css/theme3.css';
 
+const styles = {
+  calendarDialog: {
+    maxWidth: '300px',
+    margin: '0 auto'
+  }
+}
+
 class CalendarImport extends Component {
   constructor (props) {
     super (props);
@@ -27,7 +34,8 @@ class CalendarImport extends Component {
       calendarNoLocation: 'anywhere!',
       calendarChoiceDialogOpen: false,
       calendarModalText: 'Please choose your calendar',
-      closeBtn
+      closeBtn,
+      styles
     }
   }
 
@@ -153,17 +161,14 @@ class CalendarImport extends Component {
         actions={this.state.closeBtn}
         modal={true}
         open={this.state.calendarChoiceDialogOpen}
+        contentStyle={this.state.styles.calendarDialog}
       >
         <h3>{this.state.calendarModalText}</h3>
 
-        <span
-          className="addeventstc_dropdown c1"
-          aria-hidden="false"
-          style={{display: 'block'}}>
-
+        <div className="calendarBtnContainer">
           <span
             className="ateappleical"
-            id= "addeventstc3-appleical"
+            id="addeventstc3-appleical"
             role="button">
               Apple Calendar
           </span>
@@ -191,7 +196,9 @@ class CalendarImport extends Component {
             role="button">
             Yahoo <em>(online)</em>
           </span>
-        </span>
+        </div>
+
+
       </Dialog>
       </div>
 
