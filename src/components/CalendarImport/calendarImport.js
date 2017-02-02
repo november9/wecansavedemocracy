@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RaisedButton } from 'material-ui';
+import { RaisedButton, Dialog } from 'material-ui';
 import { createCalendar, createEvent, fetchCalendarEvents } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
@@ -12,11 +12,22 @@ class CalendarImport extends Component {
   constructor (props) {
     super (props);
 
+    const closeBtn = [
+      <RaisedButton
+        label="Close"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />
+    ];
+
     this.state = {
       putOnCalendar: 'Add these actions to your calendar!',
       calendarTitle: 'Democracy Action Agenda',
       calendarDescription: 'My action agenda for effecting political change!',
-      calendarNoLocation: 'anywhere!'
+      calendarNoLocation: 'anywhere!',
+      calendarChoiceDialogOpen: false,
+      calendarModalText: 'Please choose your calendar',
+      closeBtn
     }
   }
 
@@ -67,18 +78,32 @@ class CalendarImport extends Component {
       }
     }
 
-    const descNoHtml = striptags(userActivity.content.rendered);
+    const descNoHtml = striptags(userActivity.content.rendered + 'test\n' + 'a new line\n' + 'yet another line');
+    console.log('descNoHtml', descNoHtml);
     const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
 
     const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');
     const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g,'+');
     const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g,'+');
     const timezone = encodeURIComponent(userActivity.acf.timezone);
-     start_date = encodeURIComponent(getStartDateTime());
+    const start_date = encodeURIComponent(getStartDateTime());
     const all_day_event = isAllDayEvent;
 
     return 'title=' + title + '&description=' + description + '&location=' + location + '&timezone=' + timezone + '&start_date=' + start_date + '&all_day_event=' + all_day_event;
+  }
 
+  handleOpen = () => {
+    this.setState({calendarChoiceDialogOpen: true});
+  };
+
+  handleClose = () => {
+    this.setState({calendarChoiceDialogOpen: false});
+  };
+
+  triggerCalendarExport (calendarType) {
+    console.log('this.props.calendar.data.calendar.uniquekey', this.props.calendar.data.calendar.uniquekey);
+    const calendarUrl = 'http://addevent.com/subscribe/?' + this.props.calendar.data.calendar.uniquekey + '+' + calendarType;
+    var win = window.open(calendarUrl, '_blank');
   }
 
   addActivitiesToCalendar(userActivities, calendarId) {
@@ -96,6 +121,8 @@ class CalendarImport extends Component {
       const queryString = this.generateCalendarEventQueryStr(val);
       this.props.createEvent(queryString, calendarId);
     });
+
+    this.handleOpen();
   }
 
   importToCalendar () {
@@ -110,26 +137,63 @@ class CalendarImport extends Component {
   }
 
   render () {
-    window.addeventasync = function(){
-      addeventstc.settings({
-          license    : "auYdxlyGjzxZCenXymdJ25252",
-          css        : false,
-          google     : {show:true, text:"Google <em>(online)</em>"},
-      		outlook    : {show:true, text:"Outlook"},
-      		yahoo      : {show:true, text:"Yahoo <em>(online)</em>"},
-      		outlookcom : {show:true, text:"Outlook.com <em>(online)</em>"},
-      		appleical  : {show:true, text:"Apple Calendar"},
-      		dropdown   : {order:"google,appleical,outlook,outlookcom,yahoo"}
-      });
-    };
-
-    window.addeventasync();
-
     return (
-      <div title="Add to Calendar" className="addeventstc" data-id={this.props.calendar.data.calendar.uniquekey}>
-    	    Add to Calendar
-    	    <span className="arrow">&nbsp;</span>
-    	</div>
+      <div>
+
+      <RaisedButton
+        label={this.state.putOnCalendar}
+        default={true}
+        onClick={() => {
+          this.importToCalendar(this.props.userActivities);
+        }}
+        type="button"
+      />
+
+      <Dialog
+        actions={this.state.closeBtn}
+        modal={true}
+        open={this.state.calendarChoiceDialogOpen}
+      >
+        <h3>{this.state.calendarModalText}</h3>
+
+        <span
+          className="addeventstc_dropdown c1"
+          aria-hidden="false"
+          style={{display: 'block'}}>
+
+          <span
+            className="ateappleical"
+            id= "addeventstc3-appleical"
+            role="button">
+              Apple Calendar
+          </span>
+          <span
+            className="ategoogle"
+            id="addeventstc3-google"
+            role="button">
+              Google <em>(online)</em>
+          </span>
+          <span className=
+            "ateoutlook"
+            id="addeventstc3-outlook"
+            role="button">
+              Outlook
+            </span>
+          <span
+            className="ateoutlookcom"
+            id="addeventstc3-outlookcom"
+            role="button">
+              Outlook.com <em>(online)</em>
+          </span>
+          <span
+            className="ateyahoo"
+            id="addeventstc3-yahoo"
+            role="button">
+            Yahoo <em>(online)</em>
+          </span>
+        </span>
+      </Dialog>
+      </div>
 
     )
   }
