@@ -6,9 +6,17 @@ import moment from 'moment';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
+function disablePrevDates(date) {
+  return date.getDay() === 0;
+}
+
 class DateSelect extends Component {
   constructor(props) {
     super(props);
+
+    const minDate = new Date();
+    minDate.setFullYear(minDate.getFullYear() - 1);
+    minDate.setHours(0, 0, 0, 0);
 
     this.state = {
       indexOfSelectedRow: props.indexOfSelectedRow,
@@ -17,7 +25,8 @@ class DateSelect extends Component {
       customFields: props.activities[props.indexOfSelectedRow].acf,
       datePlaceholder: '(any date)',
       startDate: null,
-      datePickerHintText: 'select a date'
+      datePickerHintText: 'select a date',
+      minDate: minDate
     }
   }
 
@@ -40,6 +49,7 @@ class DateSelect extends Component {
 
     this.setState({
       startDate: date,
+      minDate: this.state.minDate
     });
   };
 
@@ -57,7 +67,8 @@ class DateSelect extends Component {
             id={'date-' + this.state.indexOfSelectedRow}
             hintText={this.state.datePickerHintText}
             value={this.state.startDate}
-            onChange={this.handleDateChange} />
+            onChange={this.handleDateChange}
+            minDate={this.state.minDate} />
         </div>
       )
     } else {

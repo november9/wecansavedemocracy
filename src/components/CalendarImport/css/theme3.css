@@ -47,7 +47,7 @@
 /* The drop down */
 
 .addeventstc_dropdown {
-    width: 100%;
+    width: auto;
     position: absolute;
     z-index: 99999;
     padding: 6px 0px 0px 0px;
@@ -106,6 +106,10 @@
 
 .addeventstc_dropdown .frs:hover {
     color: #999!important;
+}
+
+.addeventstc_dropdown span {
+  cursor: pointer;
 }
 
 .addeventstc_dropdown .ateappleical {
