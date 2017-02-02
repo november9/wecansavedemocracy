@@ -96,15 +96,6 @@ class CalendarImport extends Component {
       const queryString = this.generateCalendarEventQueryStr(val);
       this.props.createEvent(queryString, calendarId);
     });
-
-
-
-    console.log('this.props.calendar.data.calendar.uniquekey', this.props.calendar.data.calendar.uniquekey);
-
-    const calendarUrl = 'http://addevent.com/subscribe/?' + this.props.calendar.data.calendar.uniquekey + '+google';
-
-    var win = window.open(calendarUrl, '_blank');
-    win.focus();
   }
 
   importToCalendar () {
@@ -131,6 +122,8 @@ class CalendarImport extends Component {
       		dropdown   : {order:"google,appleical,outlook,outlookcom,yahoo"}
       });
     };
+
+    window.addeventasync();
 
     return (
       <div title="Add to Calendar" className="addeventstc" data-id={this.props.calendar.data.calendar.uniquekey}>
