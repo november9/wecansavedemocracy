@@ -21,22 +21,6 @@ const styles = {
   }
 }
 
-class RepData extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-
-    return (
-      <div>
-        stuff
-      </div>
-    )
-  }
-
-}
-
 class UserSelectedRepList extends Component {
   constructor (props) {
     super(props);
