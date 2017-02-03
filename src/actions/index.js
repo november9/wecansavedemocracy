@@ -16,6 +16,7 @@ export const FIND_REPS_FROM_API = 'FIND_REPS_FROM_API';
 export const LOOK_FOR_REPS = 'LOOK_FOR_REPS';
 export const CREATE_CALENDAR = 'CREATE_CALENDAR';
 export const CREATE_EVENT = 'CREATE_EVENT';
+export const DELETE_EVENT = 'DELETE_EVENT';
 export const FETCH_CALENDAR_EVENTS = 'FETCH_CALENDAR_EVENTS';
 
 const ROOT_URL = 'http://www.wecansavedemocracy.org/wp-json/wp/v2';
@@ -117,6 +118,15 @@ export function createEvent(queryString, calendarId) {
 
   return {
     type: CREATE_EVENT,
+    payload: request
+  }
+}
+
+export function deleteEvent(eventId) {
+  const request = axios.post(`${ADD_EVENT_ROOT_URL}/events/delete/?token=${ADD_EVENT_API_KEY}&event_id=${eventId}`);
+
+  return {
+    type: DELETE_EVENT,
     payload: request
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RaisedButton, Dialog } from 'material-ui';
-import { createCalendar, createEvent, fetchCalendarEvents } from '../../actions/index';
+import { createCalendar, createEvent, fetchCalendarEvents, deleteEvent } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
@@ -35,7 +35,8 @@ class CalendarImport extends Component {
       calendarChoiceDialogOpen: false,
       calendarModalText: 'Please choose your calendar',
       closeBtn,
-      styles
+      styles,
+      uniqueKey: this.props.calendar.data.calendar.uniquekey
     }
   }
 
@@ -69,9 +70,7 @@ class CalendarImport extends Component {
     // TODO: make this dynamic so we can make it a fallback? Not using for now, getting
     // this data from the API for now.
     function getTimezoneByLocation () {
-      // timezone list here: https://www.addevent.com/zones, for now going to
-      // hard-code this for dev purposes
-      // or better yet, API call to here: https://www.addevent.com/api/v1/timezones
+      // should be API call to https://www.addevent.com/api/v1/timezones
       return 'America/Chicago'
     }
 
@@ -108,30 +107,30 @@ class CalendarImport extends Component {
     this.setState({calendarChoiceDialogOpen: false});
   };
 
+  addActivitiesToCalendar(userActivities, calendarId, calendarAlreadyExists) {
+    this.props.fetchCalendarEvents(calendarId).then((response) => {
+      if (calendarAlreadyExists && _.has(response, 'payload.data.events')) {
+        response.payload.data.events.forEach((val) => {
+          this.props.deleteEvent(val.id);
+        });
+      }
+    }).then(() => {
+      userActivities.forEach((val) => {
+        // generate a query string
+        const queryString = this.generateCalendarEventQueryStr(val);
+        this.props.createEvent(queryString, calendarId);
+      });
 
-  addActivitiesToCalendar(userActivities, calendarId) {
-    // get list of calendar events
-    const eventList = this.props.fetchCalendarEvents(calendarId);
-    console.log('eventList', eventList);
-
-    // if you know the eventId you can save
-
-    // but how do you check if it's an existing calendar event?
-
-    // for each user activity...
-    userActivities.forEach((val) => {
-      // generate a query string
-      const queryString = this.generateCalendarEventQueryStr(val);
-      this.props.createEvent(queryString, calendarId);
+      this.handleOpen();
     });
-
-    this.handleOpen();
   }
 
   importToCalendar () {
+    // if there is a calendar, then just add the events...
     if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
-      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
+      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
     } else {
+      // if there is no calendar, then create the calendar first, and THEN add the events
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
         this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
@@ -160,7 +159,7 @@ class CalendarImport extends Component {
           <h3>{this.state.calendarModalText}</h3>
 
           <CalendarPickerButtons
-            uniqueKey={this.props.calendar.data.calendar.uniquekey}
+            uniqueKey={this.state.uniqueKey}
           />
         </Dialog>
       </div>
@@ -174,4 +173,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent })(CalendarImport);
+export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent, deleteEvent })(CalendarImport);
