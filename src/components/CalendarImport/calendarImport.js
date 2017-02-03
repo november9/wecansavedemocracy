@@ -27,6 +27,14 @@ class CalendarImport extends Component {
       />
     ];
 
+    function getUniqueKey () {
+      if (_.has(this.props, 'calendar.data.calendar.uniquekey')) {
+        return this.props.calendar.data.calendar.uniquekey;
+      } else {
+        return null;
+      }
+    }
+
     this.state = {
       putOnCalendar: 'Add these actions to your calendar!',
       calendarTitle: 'Democracy Action Agenda',
@@ -36,7 +44,7 @@ class CalendarImport extends Component {
       calendarModalText: 'Please choose your calendar',
       closeBtn,
       styles,
-      uniqueKey: this.props.calendar.data.calendar.uniquekey
+      uniqueKey: null
     }
   }
 
@@ -100,7 +108,10 @@ class CalendarImport extends Component {
   }
 
   handleOpen = () => {
-    this.setState({calendarChoiceDialogOpen: true});
+    this.setState({
+      calendarChoiceDialogOpen: true,
+      uniqueKey: this.props.calendar.data.calendar.uniquekey
+    });
   };
 
   handleClose = () => {
@@ -120,7 +131,7 @@ class CalendarImport extends Component {
         const queryString = this.generateCalendarEventQueryStr(val);
         this.props.createEvent(queryString, calendarId);
       });
-
+    }).then(() => {
       this.handleOpen();
     });
   }
@@ -135,6 +146,17 @@ class CalendarImport extends Component {
       then((response) => {
         this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
       })
+    }
+  }
+
+  renderCalenderButtons() {
+    console.log('this.state.uniqueKey', this.state.uniqueKey);
+    if (this.state.uniqueKey) {
+      return (
+        <CalendarPickerButtons
+          uniqueKey={this.state.uniqueKey}
+        />
+      )
     }
   }
 
@@ -158,9 +180,8 @@ class CalendarImport extends Component {
         >
           <h3>{this.state.calendarModalText}</h3>
 
-          <CalendarPickerButtons
-            uniqueKey={this.state.uniqueKey}
-          />
+          {this.renderCalenderButtons()}
+
         </Dialog>
       </div>
     )
