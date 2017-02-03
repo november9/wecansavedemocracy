@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { RaisedButton, Dialog } from 'material-ui';
-import { createCalendar, createEvent, fetchCalendarEvents } from '../../actions/index';
+import { createCalendar, createEvent, fetchCalendarEvents, deleteEvent } from '../../actions/index';
 import { connect } from 'react-redux';
 import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
-import './css/theme3.css';
+import CalendarPickerButtons from '../CalendarPickerButtons/calendarPickerButtons';
+
+const styles = {
+  calendarDialog: {
+    maxWidth: '300px',
+    margin: '0 auto'
+  }
+}
 
 class CalendarImport extends Component {
   constructor (props) {
@@ -27,7 +34,9 @@ class CalendarImport extends Component {
       calendarNoLocation: 'anywhere!',
       calendarChoiceDialogOpen: false,
       calendarModalText: 'Please choose your calendar',
-      closeBtn
+      closeBtn,
+      styles,
+      uniqueKey: this.props.calendar.data.calendar.uniquekey
     }
   }
 
@@ -61,9 +70,7 @@ class CalendarImport extends Component {
     // TODO: make this dynamic so we can make it a fallback? Not using for now, getting
     // this data from the API for now.
     function getTimezoneByLocation () {
-      // timezone list here: https://www.addevent.com/zones, for now going to
-      // hard-code this for dev purposes
-      // or better yet, API call to here: https://www.addevent.com/api/v1/timezones
+      // should be API call to https://www.addevent.com/api/v1/timezones
       return 'America/Chicago'
     }
 
@@ -100,35 +107,30 @@ class CalendarImport extends Component {
     this.setState({calendarChoiceDialogOpen: false});
   };
 
-  triggerCalendarExport (calendarType) {
-    console.log('this.props.calendar.data.calendar.uniquekey', this.props.calendar.data.calendar.uniquekey);
-    const calendarUrl = 'http://addevent.com/subscribe/?' + this.props.calendar.data.calendar.uniquekey + '+' + calendarType;
-    var win = window.open(calendarUrl, '_blank');
-  }
+  addActivitiesToCalendar(userActivities, calendarId, calendarAlreadyExists) {
+    this.props.fetchCalendarEvents(calendarId).then((response) => {
+      if (calendarAlreadyExists && _.has(response, 'payload.data.events')) {
+        response.payload.data.events.forEach((val) => {
+          this.props.deleteEvent(val.id);
+        });
+      }
+    }).then(() => {
+      userActivities.forEach((val) => {
+        // generate a query string
+        const queryString = this.generateCalendarEventQueryStr(val);
+        this.props.createEvent(queryString, calendarId);
+      });
 
-  addActivitiesToCalendar(userActivities, calendarId) {
-    // get list of calendar events
-    const eventList = this.props.fetchCalendarEvents(calendarId);
-    console.log('eventList', eventList);
-
-    // if you know the eventId you can save
-
-    // but how do you check if it's an existing calendar event?
-
-    // for each user activity...
-    userActivities.forEach((val) => {
-      // generate a query string
-      const queryString = this.generateCalendarEventQueryStr(val);
-      this.props.createEvent(queryString, calendarId);
+      this.handleOpen();
     });
-
-    this.handleOpen();
   }
 
   importToCalendar () {
+    // if there is a calendar, then just add the events...
     if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
-      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id);
+      this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
     } else {
+      // if there is no calendar, then create the calendar first, and THEN add the events
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
         this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
@@ -139,62 +141,28 @@ class CalendarImport extends Component {
   render () {
     return (
       <div>
+        <RaisedButton
+          label={this.state.putOnCalendar}
+          default={true}
+          onClick={() => {
+            this.importToCalendar(this.props.userActivities);
+          }}
+          type="button"
+        />
 
-      <RaisedButton
-        label={this.state.putOnCalendar}
-        default={true}
-        onClick={() => {
-          this.importToCalendar(this.props.userActivities);
-        }}
-        type="button"
-      />
+        <Dialog
+          actions={this.state.closeBtn}
+          modal={true}
+          open={this.state.calendarChoiceDialogOpen}
+          contentStyle={this.state.styles.calendarDialog}
+        >
+          <h3>{this.state.calendarModalText}</h3>
 
-      <Dialog
-        actions={this.state.closeBtn}
-        modal={true}
-        open={this.state.calendarChoiceDialogOpen}
-      >
-        <h3>{this.state.calendarModalText}</h3>
-
-        <span
-          className="addeventstc_dropdown c1"
-          aria-hidden="false"
-          style={{display: 'block'}}>
-
-          <span
-            className="ateappleical"
-            id= "addeventstc3-appleical"
-            role="button">
-              Apple Calendar
-          </span>
-          <span
-            className="ategoogle"
-            id="addeventstc3-google"
-            role="button">
-              Google <em>(online)</em>
-          </span>
-          <span className=
-            "ateoutlook"
-            id="addeventstc3-outlook"
-            role="button">
-              Outlook
-            </span>
-          <span
-            className="ateoutlookcom"
-            id="addeventstc3-outlookcom"
-            role="button">
-              Outlook.com <em>(online)</em>
-          </span>
-          <span
-            className="ateyahoo"
-            id="addeventstc3-yahoo"
-            role="button">
-            Yahoo <em>(online)</em>
-          </span>
-        </span>
-      </Dialog>
+          <CalendarPickerButtons
+            uniqueKey={this.state.uniqueKey}
+          />
+        </Dialog>
       </div>
-
     )
   }
 }
@@ -205,4 +173,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent })(CalendarImport);
+export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent, deleteEvent })(CalendarImport);
