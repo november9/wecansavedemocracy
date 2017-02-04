@@ -17,6 +17,9 @@ module.exports = {
       }, {
         test: /\.css$/,
         loader: "style-loader!css-loader"
+      }, {
+        include: /\.json$/,
+        loaders: ['json-loader']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
