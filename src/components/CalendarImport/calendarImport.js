@@ -44,7 +44,18 @@ class CalendarImport extends Component {
       calendarModalText: 'Please choose your calendar',
       closeBtn,
       styles,
-      uniqueKey: null
+      uniqueKey: null,
+      disableImportBtn: this.disableImportBtn()
+    }
+  }
+
+  disableImportBtn () {
+    if (this.props.userActivities.length > 0) {
+      console.log('it is true');
+      return false;
+    } else {
+      console.log('it is false');
+      return true;
     }
   }
 
@@ -108,6 +119,8 @@ class CalendarImport extends Component {
   }
 
   handleOpen = () => {
+    console.log('this.props', this.props);
+
     this.setState({
       calendarChoiceDialogOpen: true,
       uniqueKey: this.props.calendar.data.calendar.uniquekey
@@ -120,7 +133,10 @@ class CalendarImport extends Component {
 
   addActivitiesToCalendar(userActivities, calendarId, calendarAlreadyExists) {
     this.props.fetchCalendarEvents(calendarId).then((response) => {
+      // if there is already a calendar...
       if (calendarAlreadyExists && _.has(response, 'payload.data.events')) {
+        // ...first delete all of the events so that we're starting with
+        // a clean slate and won't have duplicates
         response.payload.data.events.forEach((val) => {
           this.props.deleteEvent(val.id);
         });
@@ -129,18 +145,22 @@ class CalendarImport extends Component {
       userActivities.forEach((val) => {
         // generate a query string
         const queryString = this.generateCalendarEventQueryStr(val);
+        //add user events to calendar
         this.props.createEvent(queryString, calendarId);
       });
-    }).then(() => {
-      this.handleOpen();
     });
+
+    this.handleOpen();
   }
 
   importToCalendar () {
     // if there is a calendar, then just add the events...
     if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
+      console.log('we are NOT creating a calendar');
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
     } else {
+      console.log('we ARE creating a calendar');
+
       // if there is no calendar, then create the calendar first, and THEN add the events
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
@@ -150,7 +170,6 @@ class CalendarImport extends Component {
   }
 
   renderCalenderButtons() {
-    console.log('this.state.uniqueKey', this.state.uniqueKey);
     if (this.state.uniqueKey) {
       return (
         <CalendarPickerButtons
@@ -170,6 +189,7 @@ class CalendarImport extends Component {
             this.importToCalendar(this.props.userActivities);
           }}
           type="button"
+          disabled={this.disableImportBtn()}
         />
 
         <Dialog
@@ -189,6 +209,7 @@ class CalendarImport extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state', state)
   return {
     calendar: state.calendar.calendar
   }

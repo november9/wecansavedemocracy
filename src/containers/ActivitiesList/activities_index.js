@@ -101,8 +101,6 @@ class ActivitiesList extends Component {
   handleRowSelection(rows) {
     let selectedActivities = [];
 
-    console.log('rows from handleRowSelection', rows);
-
     switch (rows) {
     case 'all':
       selectedActivities = this.state.userActivities;
@@ -153,6 +151,7 @@ class ActivitiesList extends Component {
 
   deleteActivities(selectedActivities) {
     this.props.deleteUserActivities(this.state.userActivities);
+    // TODO: also delete this from the AddEvent API
     this.setState({
       userActivities: this.state.userActivities,
       indexOfEditedRow: null
