@@ -52,10 +52,8 @@ class CalendarImport extends Component {
 
   disableImportBtn () {
     if (this.props.userActivities.length > 0) {
-      console.log('it is true');
       return false;
     } else {
-      console.log('it is false');
       return true;
     }
   }
@@ -106,7 +104,6 @@ class CalendarImport extends Component {
     }
 
     const descNoHtml = striptags(userActivity.content.rendered + 'test\n' + 'a new line\n' + 'yet another line');
-    console.log('descNoHtml', descNoHtml);
     const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
 
     const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');
@@ -120,8 +117,6 @@ class CalendarImport extends Component {
   }
 
   handleOpen = () => {
-    console.log('this.props', this.props);
-
     this.setState({
       calendarChoiceDialogOpen: true,
       uniquekey: this.props.calendar.calendar.data.calendar.uniquekey
