@@ -27,6 +27,14 @@ class CalendarImport extends Component {
       />
     ];
 
+    function getUniqueKey () {
+      if (_.has(this.props, 'calendar.data.calendar.uniquekey')) {
+        return this.props.calendar.data.calendar.uniquekey;
+      } else {
+        return null;
+      }
+    }
+
     this.state = {
       putOnCalendar: 'Add these actions to your calendar!',
       calendarTitle: 'Democracy Action Agenda',
@@ -36,7 +44,18 @@ class CalendarImport extends Component {
       calendarModalText: 'Please choose your calendar',
       closeBtn,
       styles,
-      uniqueKey: this.props.calendar.data.calendar.uniquekey
+      uniqueKey: null,
+      disableImportBtn: this.disableImportBtn()
+    }
+  }
+
+  disableImportBtn () {
+    if (this.props.userActivities.length > 0) {
+      console.log('it is true');
+      return false;
+    } else {
+      console.log('it is false');
+      return true;
     }
   }
 
@@ -100,7 +119,12 @@ class CalendarImport extends Component {
   }
 
   handleOpen = () => {
-    this.setState({calendarChoiceDialogOpen: true});
+    console.log('this.props', this.props);
+
+    this.setState({
+      calendarChoiceDialogOpen: true,
+      uniqueKey: this.props.calendar.data.calendar.uniquekey
+    });
   };
 
   handleClose = () => {
@@ -109,7 +133,10 @@ class CalendarImport extends Component {
 
   addActivitiesToCalendar(userActivities, calendarId, calendarAlreadyExists) {
     this.props.fetchCalendarEvents(calendarId).then((response) => {
+      // if there is already a calendar...
       if (calendarAlreadyExists && _.has(response, 'payload.data.events')) {
+        // ...first delete all of the events so that we're starting with
+        // a clean slate and won't have duplicates
         response.payload.data.events.forEach((val) => {
           this.props.deleteEvent(val.id);
         });
@@ -118,23 +145,37 @@ class CalendarImport extends Component {
       userActivities.forEach((val) => {
         // generate a query string
         const queryString = this.generateCalendarEventQueryStr(val);
+        //add user events to calendar
         this.props.createEvent(queryString, calendarId);
       });
-
-      this.handleOpen();
     });
+
+    this.handleOpen();
   }
 
   importToCalendar () {
     // if there is a calendar, then just add the events...
     if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
+      console.log('we are NOT creating a calendar');
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
     } else {
+      console.log('we ARE creating a calendar');
+
       // if there is no calendar, then create the calendar first, and THEN add the events
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
         this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
       })
+    }
+  }
+
+  renderCalenderButtons() {
+    if (this.state.uniqueKey) {
+      return (
+        <CalendarPickerButtons
+          uniqueKey={this.state.uniqueKey}
+        />
+      )
     }
   }
 
@@ -148,6 +189,7 @@ class CalendarImport extends Component {
             this.importToCalendar(this.props.userActivities);
           }}
           type="button"
+          disabled={this.disableImportBtn()}
         />
 
         <Dialog
@@ -158,9 +200,8 @@ class CalendarImport extends Component {
         >
           <h3>{this.state.calendarModalText}</h3>
 
-          <CalendarPickerButtons
-            uniqueKey={this.state.uniqueKey}
-          />
+          {this.renderCalenderButtons()}
+
         </Dialog>
       </div>
     )
@@ -168,6 +209,7 @@ class CalendarImport extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log('state', state)
   return {
     calendar: state.calendar.calendar
   }

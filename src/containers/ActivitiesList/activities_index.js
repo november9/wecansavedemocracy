@@ -151,9 +151,10 @@ class ActivitiesList extends Component {
 
   deleteActivities(selectedActivities) {
     this.props.deleteUserActivities(this.state.userActivities);
+    // TODO: also delete this from the AddEvent API
     this.setState({
       userActivities: this.state.userActivities,
-      indexOfSelectedRow: null
+      indexOfEditedRow: null
     }, () => this.handleRowSelection('none'));
   }
 
@@ -168,7 +169,7 @@ class ActivitiesList extends Component {
       return (
         <TableRow
           key={key}
-          selected={this.selected}>
+          selected={activity.selected}>
           <TableRowColumn style={this.state.bodyStyle.tableCellAlignTop}>
             <DateSelect
               indexOfSelectedRow={key}
