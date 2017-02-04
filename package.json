@@ -1,7 +1,7 @@
 {
-  "name": "we-can-save-democracy",
+  "name": "wecansavedemocracy",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple mobile and tablet-friendly web app to help get citizens in the habit of taking peaceful political action towards progressive causes.",
   "main": "index.js",
   "repository": "git@github.com:dorono/wecansavedemocracy.git",
   "scripts": {
@@ -9,8 +9,11 @@
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
   },
-  "author": "",
-  "license": "ISC",
+  "authors": [
+    "Doron Orenstein",
+    "Mike Hughes"
+  ],
+  "license": "GNU GPLv3",
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
