@@ -28,7 +28,7 @@ class CalendarImport extends Component {
     ];
 
     function getUniqueKey () {
-      if (_.has(this.props, 'calendar.data.calendar.uniquekey')) {
+      if (this.state.uniquekey) {
         return this.props.calendar.data.calendar.uniquekey;
       } else {
         return null;
@@ -44,8 +44,9 @@ class CalendarImport extends Component {
       calendarModalText: 'Please choose your calendar',
       closeBtn,
       styles,
-      uniqueKey: null,
-      disableImportBtn: this.disableImportBtn()
+      uniquekey: null,
+      disableImportBtn: this.disableImportBtn(),
+      calendarData: this.props.calendar
     }
   }
 
@@ -123,7 +124,7 @@ class CalendarImport extends Component {
 
     this.setState({
       calendarChoiceDialogOpen: true,
-      uniqueKey: this.props.calendar.data.calendar.uniquekey
+      uniquekey: this.props.calendar.calendar.data.calendar.uniquekey
     });
   };
 
@@ -155,12 +156,9 @@ class CalendarImport extends Component {
 
   importToCalendar () {
     // if there is a calendar, then just add the events...
-    if (_.has(this.props, 'calendar.data.calendar.id') && this.props.calendar.data.calendar.id) {
-      console.log('we are NOT creating a calendar');
+    if (_.has(this.props.calendar, 'data.calendar.id') && this.props.calendar.data.calendar.id) {
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
     } else {
-      console.log('we ARE creating a calendar');
-
       // if there is no calendar, then create the calendar first, and THEN add the events
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
@@ -170,10 +168,10 @@ class CalendarImport extends Component {
   }
 
   renderCalenderButtons() {
-    if (this.state.uniqueKey) {
+    if (this.state.uniquekey) {
       return (
         <CalendarPickerButtons
-          uniqueKey={this.state.uniqueKey}
+          uniquekey={this.state.uniquekey}
         />
       )
     }
@@ -209,9 +207,8 @@ class CalendarImport extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state', state)
   return {
-    calendar: state.calendar.calendar
+    calendar: state.calendar
   }
 }
 
