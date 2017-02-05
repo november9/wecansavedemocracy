@@ -12,7 +12,9 @@
   },
   "authors": [
     "Doron Orenstein",
-    "Mike Hughes"
+    "Mike Hughes",
+    "Joshua Travis",
+    "jsissom"
   ],
   "license": "GPL-3.0",
   "devDependencies": {

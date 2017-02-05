@@ -22,7 +22,9 @@ https://docs.google.com/drawings/d/18aKq4ts9mo3d7j8q8ND-WAyaTnrhyrEH23iaM0WSb94/
 
 ###Getting Started###
 
-Checkout this repo, install dependencies, then start the gulp process with the following:
+First, create a fork of this repo.
+
+Once you've cloned the repo from your fork, install dependencies, then start the npm process with the following:
 
 ```
 	> git clone git@github.com:november9/wecansavedemocracy.git
