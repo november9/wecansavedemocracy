@@ -6,9 +6,9 @@
   "repository": "git@github.com:dorono/wecansavedemocracy.git",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "test:orig": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "test": "mocha --reporter spec tools/test_setup.js \"src/**/*.test.js\"",
-    "test:watch": "npm run test -- --watch"
+    "test": "nyc --reporter=html mocha --reporter spec tools/test_setup.js \"src/**/*.test.js\"",
+    "test:watch": "npm run test -- --watch",
+    "test:report": "nyc report"
   },
   "authors": [
     "Doron Orenstein",
@@ -27,6 +27,7 @@
     "jquery": "^2.2.1",
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
+    "nyc": "^10.1.2",
     "react": "^15.4.1",
     "react-addons-test-utils": "^15.4.2",
     "webpack": "^1.12.9",
