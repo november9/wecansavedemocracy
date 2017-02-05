@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from './renderRepData';
+import { RepInfoDisplay, getChannels, renderChannels, getUrls, renderUrls, getOfficialAddresses, renderOfficialAddresses, renderOfficialTitle, getOfficialPhoneNumbers, renderOfficialPhoneNumbers, colors } from './renderRepData';
 
 const style = {
   officialName: {
@@ -56,7 +56,6 @@ let tempSelectedOfficials = [];
 class FindRep extends Component {
   constructor(props) {
     super(props);
-
 
     this.state = {
       cardTitleText: 'Find your local representative by entering your home address',
@@ -199,6 +198,7 @@ class FindRep extends Component {
         });
       }).
       catch((err) => {
+        console.log('err', err);
         this.setState({
           representativeData: 'BAD',
           isLoadingRepData: false
@@ -208,15 +208,26 @@ class FindRep extends Component {
   }
 
   submitSelectedRepList() {
-    let selectedRepList = [];
+    let selectedRepList = _.uniqBy(this.state.selectedOfficials, 'tempIdx');
+
+    let filteredRepData = selectedRepList.map((val, key) => {
+      return {
+        officialName: val.name,
+        officialTitle: renderOfficialTitle(this.state.representativeData, val.tempIdx),
+        officialAddresses: getOfficialAddresses(val.address),
+        officialPhones: getOfficialPhoneNumbers(val.phones),
+        officialParty: val.party,
+        officialUrls: val.urls,
+        officialChannels: getChannels(val.channels)
+      }
+    });
 
     const tempActivityData = this.props.tempActivityData;
 
     // here we update the selected activity data with this new rep list
     const activityDataWithReps = _.merge({}, tempActivityData, {
-      // need to dedup here because each click of the checkbox to add
-      // a rep seems to be firing multiple times, adding the rep multiple times
-      selectedReps: _.uniqBy(this.state.selectedOfficials, 'tempIdx')
+      selectedRepList,
+      filteredRepData
     });
 
     this.props.addUserActivity(activityDataWithReps);

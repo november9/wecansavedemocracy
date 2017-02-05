@@ -27,11 +27,23 @@ const style = {
   },
 }
 
+export function getChannels (channels) {
+  let channelUrlList = [];
+
+  if (channels) {
+    channelUrlList = channels.map((channel, key) => {
+      return channel
+    });
+  }
+
+  return channelUrlList;
+}
+
 export function renderChannels (channels) {
   let channelUrl;
 
   if (channels) {
-    return channels.map((channel, key) => {
+    return getChannels(channels).map((channel, key) => {
 
       switch(channel.type) {
         case 'GooglePlus':
@@ -63,9 +75,21 @@ export function renderChannels (channels) {
   }
 }
 
+export function getUrls(urls) {
+  if (urls) {
+    let urlList = [];
+
+    urlList = urls.map((url, key) => {
+      return url;
+    });
+
+    return urlList;
+  }
+}
+
 export function renderUrls(urls) {
   if (urls) {
-    return urls.map((url, key) => {
+    return getUrls(urls).map((url, key) => {
       return (
         <div key={key}>
           <a
@@ -81,9 +105,21 @@ export function renderUrls(urls) {
   }
 }
 
+export function getOfficialAddresses(addressInfo) {
+  if (addressInfo) {
+    let repOfficeAddresses = [];
+
+    repOfficeAddresses = addressInfo.map((address, key) => {
+      return address;
+    });
+
+    return repOfficeAddresses;
+  }
+}
+
 export function renderOfficialAddresses(addressInfo) {
   if (addressInfo) {
-    return addressInfo.map((address, key) => {
+    return getOfficialAddresses(addressInfo).map((address, key) => {
       return (
         <div className="official-address" key={key}>
           {address.line1},<br />
@@ -95,7 +131,7 @@ export function renderOfficialAddresses(addressInfo) {
 }
 
 export function renderOfficialTitle(allData, officialKey) {
-  var officeName;
+  let officeName;
 
   _.each(allData.offices, (office, officeKey) => {
     return _.each(office.officialIndices, (indice, indiceKey) => {
@@ -106,21 +142,29 @@ export function renderOfficialTitle(allData, officialKey) {
     });
   })
 
-  return (
-    <span style={style.officeName}>{officeName}</span>
-  )
+  return officeName;
+}
+
+export function getOfficialPhoneNumbers (phoneNumbers) {
+  let phoneNumList = [];
+
+  if (phoneNumbers) {
+    phoneNumList = phoneNumbers.map((number, key) => {
+      return number;
+    });
+  }
+
+  return phoneNumList;
 }
 
 export function renderOfficialPhoneNumbers (phoneNumbers) {
-  if (phoneNumbers) {
-    return phoneNumbers.map((number, key) => {
-      return (
-        <div key={key} style={style.officialPhones}>
-          {number}
-        </div>
-      )
-    });
-  }
+    return getOfficialPhoneNumbers(phoneNumbers).map((number, key) => {
+    return (
+      <div key={key} style={style.officialPhones}>
+        {number}
+      </div>
+    )
+  });
 }
 
 export class RepInfoDisplay extends Component {
@@ -134,7 +178,7 @@ export class RepInfoDisplay extends Component {
     return (
       <div>
         <h3 style={style.officialName}>{this.props.repData.name}</h3>
-        {renderOfficialTitle(this.props.officialsData, this.props.officialKey)}
+        <span style={style.officeName}>{renderOfficialTitle(this.props.officialsData, this.props.officialKey)}</span>
         {renderOfficialAddresses(this.props.repData.address)}
         {renderOfficialPhoneNumbers(this.props.repData.phones)}
         Party: <strong>{this.props.repData.party}</strong>
