@@ -18,7 +18,6 @@ class CalendarPickerButtons extends Component {
   }
 
   triggerCalendarExport (calendarType) {
-    console.log('this.state.uniquekey', this.state.uniquekey);
     const calendarUrl = 'http://addevent.com/subscribe/?' + this.state.uniquekey + '+' + calendarType;
     var win = window.open(calendarUrl, '_blank');
   }

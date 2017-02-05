@@ -24,8 +24,6 @@ const styles = {
 class UserSelectedRepList extends Component {
   constructor (props) {
     super(props);
-
-    console.log('props from UserSelectedRepList', props)
   }
 
   repListItems () {
@@ -35,20 +33,18 @@ class UserSelectedRepList extends Component {
         <li
           key={key}
           style={styles.listItem}>
-          <div style={styles.listItemHeader}>{rep.officialName}</div>
-          <RepInfoDisplay
-            repData={rep}
-            officialKey={key}
-            officialsData={this.props.activities}
-          />
+          <div>{rep.officialName}</div>
+          <div>{rep.officialTitle}</div>
+          {renderOfficialPhoneNumbers(rep.officialPhones)}
+          Party: <strong>{rep.officialParty}</strong>
+          {renderUrls(rep.officialUrls)}
+          {renderChannels(rep.officialChannels)}
         </li>
       )
     });
   }
 
   render () {
-    console.log('this.props.activities[this.props.indexOfCurrentRow]', this.props.activities[this.props.indexOfCurrentRow]);
-
     if (!this.props.activities[this.props.indexOfCurrentRow].hasOwnProperty('filteredRepData')) {
       return null;
     }

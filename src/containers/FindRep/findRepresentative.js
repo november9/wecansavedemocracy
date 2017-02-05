@@ -198,7 +198,6 @@ class FindRep extends Component {
         });
       }).
       catch((err) => {
-        console.log('err', err);
         this.setState({
           representativeData: 'BAD',
           isLoadingRepData: false
