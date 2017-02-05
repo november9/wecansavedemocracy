@@ -110,6 +110,7 @@ class FindRep extends Component {
             <TableRowColumn style={style.tableRowColumn}>
               <RepInfoDisplay
                 repData={data}
+                officialKey={key}
                 officialsData={officialsData}
                 headerStyle={style.officialName}
               />

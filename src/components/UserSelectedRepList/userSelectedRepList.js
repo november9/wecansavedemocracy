@@ -36,6 +36,7 @@ class UserSelectedRepList extends Component {
           <div style={styles.listItemHeader}>{rep.officialName}</div>
           <RepInfoDisplay
             repData={rep}
+            officialKey={key}
             officialsData={this.props.activities}
           />
         </li>

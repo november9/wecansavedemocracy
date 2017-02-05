@@ -129,12 +129,12 @@ export class RepInfoDisplay extends Component {
   }
 
   render () {
-
+    console.log('this.props.officialKey', this.props.officialKey);
 
     return (
       <div>
         <h3 style={style.officialName}>{this.props.repData.name}</h3>
-        {renderOfficialTitle(this.props.officialsData, this.props.key)}
+        {renderOfficialTitle(this.props.officialsData, this.props.officialKey)}
         {renderOfficialAddresses(this.props.repData.address)}
         {renderOfficialPhoneNumbers(this.props.repData.phones)}
         Party: <strong>{this.props.repData.party}</strong>
