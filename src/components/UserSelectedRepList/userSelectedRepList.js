@@ -27,24 +27,25 @@ class UserSelectedRepList extends Component {
   }
 
   repListItems () {
-    return this.props.activities[this.props.indexOfCurrentRow].selectedReps.map((rep, key) => {
+    return this.props.activities[this.props.indexOfCurrentRow].filteredRepData.map((rep, key) => {
 
       return (
         <li
           key={key}
           style={styles.listItem}>
-          <div style={styles.listItemHeader}>{rep.officialName}</div>
-          <RepInfoDisplay
-            repData={rep}
-            officialsData={this.props.activities}
-          />
+          <div>{rep.officialName}</div>
+          <div>{rep.officialTitle}</div>
+          {renderOfficialPhoneNumbers(rep.officialPhones)}
+          Party: <strong>{rep.officialParty}</strong>
+          {renderUrls(rep.officialUrls)}
+          {renderChannels(rep.officialChannels)}
         </li>
       )
     });
   }
 
   render () {
-    if (!this.props.activities[this.props.indexOfCurrentRow].hasOwnProperty('selectedReps')) {
+    if (!this.props.activities[this.props.indexOfCurrentRow].hasOwnProperty('filteredRepData')) {
       return null;
     }
 

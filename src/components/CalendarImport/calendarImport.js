@@ -27,14 +27,6 @@ class CalendarImport extends Component {
       />
     ];
 
-    function getUniqueKey () {
-      if (this.state.uniquekey) {
-        return this.props.calendar.data.calendar.uniquekey;
-      } else {
-        return null;
-      }
-    }
-
     this.state = {
       putOnCalendar: 'Add these actions to your calendar!',
       calendarTitle: 'Democracy Action Agenda',
@@ -46,7 +38,7 @@ class CalendarImport extends Component {
       styles,
       uniquekey: null,
       disableImportBtn: this.disableImportBtn(),
-      calendarData: this.props.calendar
+      calendarData: props.calendar
     }
   }
 
@@ -103,7 +95,7 @@ class CalendarImport extends Component {
       }
     }
 
-    const descNoHtml = striptags(userActivity.content.rendered + 'test\n' + 'a new line\n' + 'yet another line');
+    const descNoHtml = striptags(userActivity.content.rendered);
     const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
 
     const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');

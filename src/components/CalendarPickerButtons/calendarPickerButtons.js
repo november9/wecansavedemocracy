@@ -13,13 +13,12 @@ class CalendarPickerButtons extends Component {
     super(props);
 
     this.state = {
-      uniqueKey: this.props.uniqueKey
+      uniquekey: props.uniquekey
     }
   }
 
   triggerCalendarExport (calendarType) {
-    console.log('this.state.uniqueKey', this.state.uniqueKey);
-    const calendarUrl = 'http://addevent.com/subscribe/?' + this.state.uniqueKey + '+' + calendarType;
+    const calendarUrl = 'http://addevent.com/subscribe/?' + this.state.uniquekey + '+' + calendarType;
     var win = window.open(calendarUrl, '_blank');
   }
 

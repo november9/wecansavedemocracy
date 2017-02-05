@@ -6,7 +6,6 @@ let tempActivityList
 
 const INITIAL_STATE = {
   all: [],
-  selectedReps: [],
   tempActivityData: {}
 };
 
