@@ -13,7 +13,7 @@
     "Doron Orenstein",
     "Mike Hughes"
   ],
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0",
   "devDependencies": {
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
