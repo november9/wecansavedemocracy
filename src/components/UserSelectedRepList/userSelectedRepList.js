@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from '../../containers/FindRep/renderRepData';
 
 const styles = {
@@ -10,7 +10,7 @@ const styles = {
   list: {
     listStyleType: 'none',
     margin: 0,
-    padding: 0,
+    padding: 0
   },
   listItem: {
     borderTop: '1px solid #ccc',
@@ -19,7 +19,7 @@ const styles = {
   listItemHeader: {
     fontSize: '16px'
   }
-}
+};
 
 class UserSelectedRepList extends Component {
   constructor (props) {
@@ -40,7 +40,7 @@ class UserSelectedRepList extends Component {
           {renderUrls(rep.officialUrls)}
           {renderChannels(rep.officialChannels)}
         </li>
-      )
+      );
     });
   }
 
@@ -55,9 +55,13 @@ class UserSelectedRepList extends Component {
       >
         {this.repListItems()}
       </ul>
-    )
+    );
   }
 }
 
+UserSelectedRepList.propTypes = {
+  activities: PropTypes.any,
+  indexOfCurrentRow: PropTypes.any
+};
 
 export default UserSelectedRepList;

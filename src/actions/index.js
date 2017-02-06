@@ -6,8 +6,10 @@ import moment from 'moment';
 
 export const FETCH_ACTIVITIES = 'FETCH_ACTIVITIES';
 export const FETCH_ACTIVITY = 'FETCH_ACTIVITY';
+export const FIND_REP = 'FIND_REP';
 export const DELETE_USER_ACTIVITIES = 'DELETE_USER_ACTIVITIES';
 export const FETCH_CAUSES = 'FETCH_CAUSES';
+export const SUBMIT_ACTIVITY_WITH_REPS = 'SUBMIT_ACTIVITY_WITH_REPS';
 export const FETCH_ACTIVITIES_FROM_CAUSES = 'FETCH_ACTIVITIES_FROM_CAUSES';
 export const FETCH_USER_ACTIVITIES = 'FETCH_USER_ACTIVITIES';
 export const ADD_USER_ACTIVITY = 'ADD_USER_ACTIVITY';
@@ -50,28 +52,28 @@ export function fetchActivity(id) {
   return {
     type: FETCH_ACTIVITY,
     payload: request
-  }
+  };
 }
 
 export function addUserActivity(selectedActivity) {
   return {
     type: ADD_USER_ACTIVITY,
     payload: selectedActivity
-  }
+  };
 }
 
 export function lookForReps(selectedActivity) {
   return {
     type: LOOK_FOR_REPS,
     payload: selectedActivity
-  }
+  };
 }
 
 export function fetchUserActivities (userActivities) {
   return {
     type: FETCH_USER_ACTIVITIES,
     payload: userActivities
-  }
+  };
 }
 
 export function findReps(address) {
@@ -80,14 +82,14 @@ export function findReps(address) {
   return {
     type: FIND_REPS_FROM_API,
     payload: request
-  }
+  };
 }
 
 export function deleteUserActivities(deletedActivities) {
   return {
     type: DELETE_USER_ACTIVITIES,
     payload: deletedActivities
-  }
+  };
 }
 
 export function fetchCalendarEvents(calendarId) {
@@ -96,12 +98,12 @@ export function fetchCalendarEvents(calendarId) {
   return {
     type: FETCH_CALENDAR_EVENTS,
     payload: request
-  }
+  };
 }
 
 export function createCalendar(calendarTitle, calendarDescription) {
-  const encodedCalendarTitle = encodeURIComponent(calendarTitle).replace(/%20/g,'+')
-  const encodedCalendarDescription = encodeURIComponent(calendarDescription).replace(/%20/g,'+')
+  const encodedCalendarTitle = encodeURIComponent(calendarTitle).replace(/%20/g,'+');
+  const encodedCalendarDescription = encodeURIComponent(calendarDescription).replace(/%20/g,'+');
 
   const encodedEndpoint = encodeURI(`${ADD_EVENT_ROOT_URL}/create/?token=${ADD_EVENT_API_KEY}&title=${encodedCalendarTitle}&description=${encodedCalendarDescription}`);
 
@@ -110,7 +112,7 @@ export function createCalendar(calendarTitle, calendarDescription) {
   return {
     type: CREATE_CALENDAR,
     payload: request
-  }
+  };
 }
 
 export function createEvent(queryString, calendarId) {
@@ -119,7 +121,7 @@ export function createEvent(queryString, calendarId) {
   return {
     type: CREATE_EVENT,
     payload: request
-  }
+  };
 }
 
 export function deleteEvent(eventId) {
@@ -128,5 +130,5 @@ export function deleteEvent(eventId) {
   return {
     type: DELETE_EVENT,
     payload: request
-  }
+  };
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import './css/theme3.css';
 
 const styles = {
@@ -6,7 +6,7 @@ const styles = {
     maxWidth: '300px',
     margin: '0 auto'
   }
-}
+};
 
 class CalendarPickerButtons extends Component {
   constructor (props) {
@@ -14,12 +14,12 @@ class CalendarPickerButtons extends Component {
 
     this.state = {
       uniquekey: props.uniquekey
-    }
+    };
   }
 
   triggerCalendarExport (calendarType) {
     const calendarUrl = 'http://addevent.com/subscribe/?' + this.state.uniquekey + '+' + calendarType;
-    var win = window.open(calendarUrl, '_blank');
+    const win = window.open(calendarUrl, '_blank');
   }
 
   render() {
@@ -61,7 +61,12 @@ class CalendarPickerButtons extends Component {
           Yahoo <em>(online)</em>
         </span>
       </div>
-    )
+    );
   }
 }
+
+CalendarPickerButtons.propTypes = {
+  uniquekey: PropTypes.any
+};
+
 export default CalendarPickerButtons;

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import _ from 'lodash';
 import addLeadingZeros from '../utils/addLeadingZeros';
 
 const sortByDate = (list) => {
@@ -53,6 +54,6 @@ const sortByDate = (list) => {
   }
 
 
-}
+};
 
 export default sortByDate;

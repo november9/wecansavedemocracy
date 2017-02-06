@@ -4,6 +4,6 @@ const addLeadingZeros = (num) => {
   } else {
     return num;
   }
-}
+};
 
 export default addLeadingZeros;

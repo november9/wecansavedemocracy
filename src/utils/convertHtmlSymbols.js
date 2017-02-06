@@ -9,6 +9,6 @@ const convertHtmlSymbols = (string) => {
   } else {
     return string;
   }
-}
+};
 
 export default convertHtmlSymbols;

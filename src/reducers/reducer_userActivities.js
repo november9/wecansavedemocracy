@@ -1,8 +1,9 @@
 import { ADD_USER_ACTIVITY, LOOK_FOR_REPS, SUBMIT_ACTIVITY_WITH_REPS, FETCH_USER_ACTIVITIES, DELETE_USER_ACTIVITIES } from '../actions/index';
 import sortByDate from '../utils/sortByDate';
+import _ from 'lodash';
 import { browserHistory } from 'react-router';
 
-let tempActivityList
+let tempActivityList;
 
 const INITIAL_STATE = {
   all: [],

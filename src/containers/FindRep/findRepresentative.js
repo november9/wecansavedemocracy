@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { findReps, addUserActivity } from '../../actions/index';
 import { TextField } from 'redux-form-material-ui';
@@ -49,7 +49,7 @@ const style = {
   addCancelBtns: {
     padding: '10px 0 0 16px'
   }
-}
+};
 
 let tempSelectedOfficials = [];
 
@@ -83,7 +83,9 @@ class FindRep extends Component {
       break;
     case 'none':
       tempSelectedOfficials = [];
-    default:
+      /*eslint-disable no-fallthrough*/
+      // Intentional fallthrough?
+       default:
       this.state.representativeData.officials.forEach((official, i) => {
         official.selected = rows.indexOf(i) > -1;
         if (official.selected === true) {
@@ -92,6 +94,7 @@ class FindRep extends Component {
       });
   }
 
+    /*eslint-enable no-fallthrough*/
     this.setState({selectedOfficials: tempSelectedOfficials});
   }
 
@@ -115,7 +118,7 @@ class FindRep extends Component {
               />
             </TableRowColumn>
           </TableRow>
-        )
+        );
       }
     });
   }
@@ -126,13 +129,13 @@ class FindRep extends Component {
         <div style={this.state.style.loadingIconContainer}>
           <CircularProgress />
         </div>
-      )
+      );
     }
 
     if(this.state.representativeData === 'BAD') {
       return (
         <h3 style={this.state.style.tableDescription}>{this.state.repSearchErrorMsg}</h3>
-      )
+      );
     }
 
     if (this.state.representativeData.hasOwnProperty('kind')) {
@@ -145,7 +148,7 @@ class FindRep extends Component {
           </h3>
 
           <Table
-            multiSelectable={true}
+            multiSelectable
             onRowSelection={this.onRowSelection}>
             <TableHeader>
               <TableRow>
@@ -162,18 +165,18 @@ class FindRep extends Component {
           <div style={this.state.style.addCancelBtns}>
             <RaisedButton
               label={this.state.addRepsToActionList}
-              secondary={true}
+              secondary
               style={this.state.style.btnStyle}
               onClick={() => this.submitSelectedRepList()} />
 
             <RaisedButton
               label={this.state.cancelBtnText}
-              primary={true}
+              primary
               style={this.state.style.btnStyle}
               onClick={() => browserHistory.push('/actions/new')} />
           </div>
         </div>
-      )
+      );
     }
   }
 
@@ -203,7 +206,7 @@ class FindRep extends Component {
           isLoadingRepData: false
         });
       });
-    })
+    });
   }
 
   submitSelectedRepList() {
@@ -218,7 +221,7 @@ class FindRep extends Component {
         officialParty: val.party,
         officialUrls: val.urls,
         officialChannels: getChannels(val.channels)
-      }
+      };
     });
 
     const tempActivityData = this.props.tempActivityData;
@@ -252,12 +255,12 @@ class FindRep extends Component {
             <div>
               <RaisedButton
                 label={this.state.submitBtnText}
-                secondary={true}
+                secondary
                 style={this.state.style.btnStyle}
                 type="submit" />
               <RaisedButton
                 label={this.state.cancelBtnText}
-                primary={true}
+                primary
                 style={this.state.style.btnStyle}
                 onClick={() => browserHistory.push('/actions/new')} />
             </div>
@@ -272,10 +275,10 @@ class FindRep extends Component {
 
 function validate (values) {
   const errors = {};
-  const requiredFields = [ 'address' ]
+  const requiredFields = [ 'address' ];
   requiredFields.forEach(field => {
     if(!values[field]) {
-      errors[field] = 'This field is required.'
+      errors[field] = 'This field is required.';
     }
   });
 
@@ -284,15 +287,24 @@ function validate (values) {
 
 function mapStateToProps(state) {
   return {
-    tempActivityData: state.userActivities.tempActivityData,
-  }
-};
+    tempActivityData: state.userActivities.tempActivityData
+  };
+}
 
 
 const repSearchForm = reduxForm({
     form: 'FindRepForm',
     fields: [ 'address'  ],
     validate
-})
+});
 
+FindRep.propTypes = {
+  tempActivityData: PropTypes.object.isRequired,
+  addUserActivity: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  fields: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ])
+};
 export default connect(mapStateToProps, { addUserActivity })(repSearchForm(FindRep));

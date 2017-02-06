@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { SelectField, MenuItem } from 'material-ui';
 import Moment from 'react-moment';
 import _ from 'lodash';
@@ -7,10 +7,10 @@ const timeCommitmentPlaceholder = '(none specified)';
 const timeCommitmentOptions = [
   {
     mins: null,
-    label:  '(none specified)'
+    label: '(none specified)'
   }, {
     mins: 5,
-    label:  '5 minutes or less'
+    label: '5 minutes or less'
   }, {
     mins: 15,
     label: '15 minutes'
@@ -28,7 +28,7 @@ const timeCommitmentOptions = [
     label: '4 hours'
   }, {
     mins: 1440,
-    label:  '1 day'
+    label: '1 day'
   }, {
     mins: 2880,
     label: '2 days'
@@ -47,8 +47,8 @@ const timeCommitmentOptions = [
   }, {
     mins: 40320,
     label: '1 month or more'
-  },
- ]
+  }
+];
 
 class TimeCommitmentSelect extends Component {
   constructor(props) {
@@ -61,8 +61,10 @@ class TimeCommitmentSelect extends Component {
       customFields: props.activities[props.indexOfSelectedRow].acf,
       timeCommitmentHint: 'select time commitment',
       timeCommitmentVal: null,
-      timeCommitmentPlaceholder,
-    }
+      timeCommitmentPlaceholder
+    };
+
+    this.handleTimeCommitmentChange = this.handleTimeCommitmentChange.bind(this);
   }
 
   generateTimeCommitmentOptions() {
@@ -71,13 +73,13 @@ class TimeCommitmentSelect extends Component {
         <MenuItem
           key={key}
           value={timeCommitment.mins}
-          primaryText={timeCommitment.label} />
-      )
+          primaryText={timeCommitment.label}/>
+      );
     });
   }
 
-  handleTimeCommitmentChange = (event, index, value) =>  {
-    this.setState({ timeCommitmentVal: value });
+  handleTimeCommitmentChange(event, index, value) {
+    this.setState({timeCommitmentVal: value});
   }
 
   render() {
@@ -96,10 +98,10 @@ class TimeCommitmentSelect extends Component {
             id={'tc-' + this.state.indexOfSelectedRow}
             value={this.state.timeCommitmentVal}
             onChange={this.handleTimeCommitmentChange}>
-              {this.generateTimeCommitmentOptions(this.state.timeCommitmentVal)}
+            {this.generateTimeCommitmentOptions(this.state.timeCommitmentVal)}
           </SelectField>
         </div>
-      )
+      );
     } else {
       if (timeCommitment || this.state.timeCommitmentVal !== null) {
         if (this.state.timeCommitmentVal) {
@@ -129,5 +131,11 @@ class TimeCommitmentSelect extends Component {
     }
   }
 }
+
+TimeCommitmentSelect.propTypes = {
+  indexOfSelectedRow: PropTypes.number,
+  indexOfEditedRow: PropTypes.number,
+  activities: PropTypes.array
+};
 
 export default TimeCommitmentSelect;

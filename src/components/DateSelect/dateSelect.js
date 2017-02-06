@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { DatePicker } from 'material-ui';
 import Moment from 'react-moment';
 import { fetchUserActivities } from '../../actions/index';
@@ -27,7 +27,7 @@ class DateSelect extends Component {
       startDate: null,
       datePickerHintText: 'select a date',
       minDate: minDate
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,18 +40,18 @@ class DateSelect extends Component {
       customFields: nextProps.activities[nextProps.indexOfSelectedRow].acf,
       timePlaceholder: '(any time)',
       timePickerHint: 'select time',
-      startTime: null,
-    })
+      startTime: null
+    });
   }
 
-  handleDateChange = (event, date) => {
+  handleDateChange (event, date) {
     this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(date).format('YYYYMMDD');
 
     this.setState({
       startDate: date,
       minDate: this.state.minDate
     });
-  };
+  }
 
   render() {
     let startDate;
@@ -70,7 +70,7 @@ class DateSelect extends Component {
             onChange={this.handleDateChange}
             minDate={this.state.minDate} />
         </div>
-      )
+      );
     } else {
       if (startDate || this.state.startDate !== null) {
 
@@ -85,7 +85,7 @@ class DateSelect extends Component {
               date={startDate}
             />
           </span>
-        )
+        );
 
       } else {
         //...or display the placeholder text for when no start date is selected
@@ -98,5 +98,11 @@ class DateSelect extends Component {
     }
   }
 }
+
+DateSelect.propTypes = {
+  indexOfSelectedRow: PropTypes.number,
+  indexOfEditedRow: PropTypes.number,
+  activities: PropTypes.array
+};
 
 export default DateSelect;
