@@ -4,9 +4,7 @@
 // 3) We define our mapDispatchToProps() function
 // 4) And we connect it to our component
 
-//import React from 'react';
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import {CircularProgress, GridList, GridTile, Card, CardTitle, CardText, Checkbox, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, RaisedButton} from 'material-ui';
 import { connect } from 'react-redux';
@@ -43,8 +41,8 @@ const styles = {
   activitySearchBtnLabel: {
     fontSize: '25px',
     fontWeight: 'bold'
-  },
-}
+  }
+};
 
 class ActivitiesNew extends Component {
   constructor(props) {
@@ -66,8 +64,8 @@ class ActivitiesNew extends Component {
       showCheckboxes: false,
       bodyStyle: styles,
       checkboxSectionTitle: 'Select Causes to Take Action On',
-      searchForActivities: 'Find Actions to Take',
-    }
+      searchForActivities: 'Find Actions to Take'
+    };
 
     this.handleCheck = this.handleCheck.bind(this);
     this.searchForActivities = this.searchForActivities.bind(this);
@@ -75,9 +73,9 @@ class ActivitiesNew extends Component {
 
   componentWillMount() {
     this.props.fetchCauses()
-    .then(() => {
-      this.setState({ isLoadingCauses: false })
-    });
+      .then(() => {
+        this.setState({isLoadingCauses: false});
+      });
   }
 
   fetchActivitiesFromCauses(selectedCauses) {
@@ -102,14 +100,14 @@ class ActivitiesNew extends Component {
   }
 
   handleCheck(id) {
-    let found = this.state.activeCheckboxes.includes(id)
+    let found = this.state.activeCheckboxes.includes(id);
     if (found) {
       this.setState({
         activeCheckboxes: this.state.activeCheckboxes.filter(x => x !== id)
       });
     } else {
       this.setState({
-        activeCheckboxes: [ ...this.state.activeCheckboxes, id ]
+        activeCheckboxes: [...this.state.activeCheckboxes, id]
       });
     }
   }
@@ -120,6 +118,7 @@ class ActivitiesNew extends Component {
 
   renderCauseCheckboxes() {
     return this.props.causes.map((cause) => {
+      /*eslint-disable react/jsx-no-bind*/
       return (
         <GridTile key={cause.id}>
           <Checkbox
@@ -132,6 +131,7 @@ class ActivitiesNew extends Component {
     });
   }
 
+  /*eslint-enable react/jsx-no-bind*/
   renderActivities(ActivityArr) {
     if (this.state.isLoadingActivities) {
       return (
@@ -150,18 +150,18 @@ class ActivitiesNew extends Component {
             NOTHING
           </TableRowColumn>
         </TableRow>
-      )
+      );
     }
 
 
     return ActivityArr.map((activity) => {
       return (
-        <IndividualActivity ActivityData={activity} key={activity.id} />
-      )
+        <IndividualActivity ActivityData={activity} key={activity.id}/>
+      );
     });
   }
 
-  render () {
+  render() {
     if (this.state.isLoadingCauses) {
       return (
         <div className="loading-causes">
@@ -173,7 +173,7 @@ class ActivitiesNew extends Component {
     return (
       <div>
         <Card style={this.state.bodyStyle.checkBoxSection}>
-          <CardTitle title={this.state.checkboxSectionTitle} />
+          <CardTitle title={this.state.checkboxSectionTitle}/>
           <CardText className="checkbox-content">
             <GridList cols={3} cellHeight="auto">
               {this.renderCauseCheckboxes()}
@@ -184,7 +184,7 @@ class ActivitiesNew extends Component {
         <RaisedButton
           disabled={this.state.activeCheckboxes.length < 1}
           label={this.state.searchForActivities}
-          secondary={true}
+          secondary
           onTouchTap={this.searchForActivities}
           style={this.state.bodyStyle.activitySearchBtn}
           labelStyle={this.state.bodyStyle.activitySearchBtnLabel}
@@ -217,7 +217,14 @@ class ActivitiesNew extends Component {
 function mapStateToProps(state) {
   return {
     causes: state.causes.all
-  }
+  };
 }
+
+ActivitiesNew.propTypes = {
+  fetchCauses: PropTypes.func.isRequired,
+  fetchActivities: PropTypes.func.isRequired,
+  causes: PropTypes.array.isRequired
+};
+
 // a shortcut to avoid mapDispatchToProps()
 export default connect(mapStateToProps, { fetchCauses, fetchActivities, fetchActivity })(ActivitiesNew);

@@ -8,7 +8,9 @@
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "nyc --reporter=html mocha --reporter spec tools/test_setup.js \"src/**/*.test.js\"",
     "test:watch": "npm run test -- --watch",
-    "test:report": "nyc report"
+    "test:report": "nyc report",
+    "lint": "esw src",
+    "lint:watch": "npm run lint -- --watch"
   },
   "authors": [
     "Doron Orenstein",
@@ -25,6 +27,11 @@
     "babel-register": "^6.22.0",
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
+    "eslint": "^2.13.1",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-react": "^5.2.2",
+    "eslint-watch": "^2.1.14",
     "enzyme": "^2.7.1",
     "jquery": "^2.2.1",
     "jsdom": "^8.1.0",

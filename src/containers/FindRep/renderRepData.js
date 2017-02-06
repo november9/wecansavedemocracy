@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -7,7 +7,7 @@ export const colors = {
   highlight2: '#0097a7',
   highlight3: '#fff',
   headerBar: '#0097a7'
-}
+};
 
 const style = {
   officialPhones: {
@@ -24,15 +24,15 @@ const style = {
     color: colors.highlight3,
     fontSize: '14px',
     marginLeft: '5px'
-  },
-}
+  }
+};
 
 export function getChannels (channels) {
   let channelUrlList = [];
 
   if (channels) {
     channelUrlList = channels.map((channel, key) => {
-      return channel
+      return channel;
     });
   }
 
@@ -70,7 +70,7 @@ export function renderChannels (channels) {
             className="material-icons"
             style={style.launchIcon}>launch</FontIcon>
         </div>
-      )
+      );
     });
   }
 }
@@ -100,7 +100,7 @@ export function renderUrls(urls) {
             className="material-icons"
             style={style.launchIcon}>launch</FontIcon>
         </div>
-      )
+      );
     });
   }
 }
@@ -125,7 +125,7 @@ export function renderOfficialAddresses(addressInfo) {
           {address.line1},<br />
           {address.city}, {address.state}, {address.address}
         </div>
-      )
+      );
     });
   }
 }
@@ -140,7 +140,7 @@ export function renderOfficialTitle(allData, officialKey) {
         return false;
       }
     });
-  })
+  });
 
   return officeName;
 }
@@ -163,7 +163,7 @@ export function renderOfficialPhoneNumbers (phoneNumbers) {
       <div key={key} style={style.officialPhones}>
         {number}
       </div>
-    )
+    );
   });
 }
 
@@ -183,6 +183,11 @@ export class RepInfoDisplay extends Component {
         {renderUrls(this.props.repData.urls)}
         {renderChannels(this.props.repData.channels)}
       </div>
-    )
+    );
   }
 }
+
+RepInfoDisplay.propTypes = {
+  repData: PropTypes.object.isRequired,
+  officialsData: PropTypes.object.isRequired
+};

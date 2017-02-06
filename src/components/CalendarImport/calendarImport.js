@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { RaisedButton, Dialog } from 'material-ui';
 import { createCalendar, createEvent, fetchCalendarEvents, deleteEvent } from '../../actions/index';
 import { connect } from 'react-redux';
@@ -13,16 +14,18 @@ const styles = {
     maxWidth: '300px',
     margin: '0 auto'
   }
-}
+};
 
 class CalendarImport extends Component {
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
+
+    this.handleClose = this.handleClose.bind(this);
 
     const closeBtn = [
-      <RaisedButton
+      <RaisedButton key="close"
         label="Close"
-        primary={true}
+        primary
         onTouchTap={this.handleClose}
       />
     ];
@@ -39,10 +42,11 @@ class CalendarImport extends Component {
       uniquekey: null,
       disableImportBtn: this.disableImportBtn(),
       calendarData: props.calendar
-    }
+    };
+
   }
 
-  disableImportBtn () {
+  disableImportBtn() {
     if (this.props.userActivities.length > 0) {
       return false;
     } else {
@@ -61,7 +65,7 @@ class CalendarImport extends Component {
       userActivity.acf.zip
     ];
 
-    function generateStringVal (arrayOfStrings) {
+    function generateStringVal(arrayOfStrings) {
       let currString = '';
       let stringArr = [];
 
@@ -79,12 +83,12 @@ class CalendarImport extends Component {
 
     // TODO: make this dynamic so we can make it a fallback? Not using for now, getting
     // this data from the API for now.
-    function getTimezoneByLocation () {
+    function getTimezoneByLocation() {
       // should be API call to https://www.addevent.com/api/v1/timezones
-      return 'America/Chicago'
+      return 'America/Chicago';
     }
 
-    function getStartDateTime () {
+    function getStartDateTime() {
       // return current date/time if there is no timeInMilliseconds property
       if (userActivity.timeInMilliseconds && typeof userActivity.timeInMilliseconds === 'number' && userActivity.acf.date && userActivity.acf.date.length) {
         isAllDayEvent = false;
@@ -98,9 +102,9 @@ class CalendarImport extends Component {
     const descNoHtml = striptags(userActivity.content.rendered);
     const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
 
-    const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g,'+');
-    const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g,'+');
-    const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g,'+');
+    const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g, '+');
+    const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g, '+');
+    const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g, '+');
     const timezone = encodeURIComponent(userActivity.acf.timezone);
     const start_date = encodeURIComponent(getStartDateTime());
     const all_day_event = isAllDayEvent;
@@ -108,16 +112,16 @@ class CalendarImport extends Component {
     return 'title=' + title + '&description=' + description + '&location=' + location + '&timezone=' + timezone + '&start_date=' + start_date + '&all_day_event=' + all_day_event;
   }
 
-  handleOpen = () => {
+  handleOpen() {
     this.setState({
       calendarChoiceDialogOpen: true,
       uniquekey: this.props.calendar.calendar.data.calendar.uniquekey
     });
-  };
+  }
 
-  handleClose = () => {
+  handleClose() {
     this.setState({calendarChoiceDialogOpen: false});
-  };
+  }
 
   addActivitiesToCalendar(userActivities, calendarId, calendarAlreadyExists) {
     this.props.fetchCalendarEvents(calendarId).then((response) => {
@@ -141,7 +145,7 @@ class CalendarImport extends Component {
     this.handleOpen();
   }
 
-  importToCalendar () {
+  importToCalendar() {
     // if there is a calendar, then just add the events...
     if (_.has(this.props.calendar, 'data.calendar.id') && this.props.calendar.data.calendar.id) {
       this.addActivitiesToCalendar(this.props.userActivities, this.props.calendar.data.calendar.id, true);
@@ -150,7 +154,7 @@ class CalendarImport extends Component {
       this.props.createCalendar(this.state.calendarTitle, this.state.calendarDescription).
       then((response) => {
         this.addActivitiesToCalendar(this.props.userActivities, response.payload.data.calendar.id);
-      })
+      });
     }
   }
 
@@ -160,16 +164,17 @@ class CalendarImport extends Component {
         <CalendarPickerButtons
           uniquekey={this.state.uniquekey}
         />
-      )
+      );
     }
   }
 
-  render () {
+  render() {
+    /*eslint-disable react/jsx-no-bind*/
     return (
       <div>
         <RaisedButton
           label={this.state.putOnCalendar}
-          default={true}
+          default
           onClick={() => {
             this.importToCalendar(this.props.userActivities);
           }}
@@ -179,7 +184,7 @@ class CalendarImport extends Component {
 
         <Dialog
           actions={this.state.closeBtn}
-          modal={true}
+          modal
           open={this.state.calendarChoiceDialogOpen}
           contentStyle={this.state.styles.calendarDialog}
         >
@@ -189,14 +194,22 @@ class CalendarImport extends Component {
 
         </Dialog>
       </div>
-    )
+    );
   }
 }
 
 function mapStateToProps(state) {
   return {
     calendar: state.calendar
-  }
+  };
 }
+CalendarImport.propTypes = {
+  calendar: PropTypes.any,
+  userActivities: PropTypes.any,
+  fetchCalendarEvents: PropTypes.func.isRequired,
+  deleteEvent: PropTypes.func.isRequired,
+  createEvent: PropTypes.func.isRequired,
+  createCalendar: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps, { fetchCalendarEvents, createCalendar, createEvent, deleteEvent })(CalendarImport);

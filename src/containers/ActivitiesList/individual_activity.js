@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addUserActivity, lookForReps } from '../../actions/index';
 import { browserHistory } from 'react-router';
@@ -15,7 +15,7 @@ const styles = {
     verticalAlign: 'middle'
   },
   tableRow: {
-    backgroundColor: cyan700,
+    backgroundColor: cyan700
   },
   ActivityTitleCell: {
     whiteSpace: 'inherit',
@@ -40,7 +40,7 @@ const styles = {
   dialogAlignTop: {
     top: '-20%'
   }
-}
+};
 
 class IndividualActivity extends Component {
   constructor(props) {
@@ -48,8 +48,9 @@ class IndividualActivity extends Component {
 
     const closeBtn = [
       <RaisedButton
+        key="close"
         label="Close"
-        primary={true}
+        primary
         onTouchTap={this.handleClose}
       />
     ];
@@ -61,18 +62,23 @@ class IndividualActivity extends Component {
       open: false,
       contactModalText: 'Find Your Local Representative',
       closeBtn
-    }
+    };
+
+    this.addActivity = this.addActivity.bind(this);
   }
 
-  handleOpen = () => {
+  handleOpen() {
     this.setState({open: true});
-  };
+  }
 
-  handleClose = () => {
+  handleClose() {
     this.setState({open: false});
-  };
+  }
 
-  loadElectionWidget () {
+  loadElectionWidget() {
+    // Is `vit` a global? Was an import missed? Not sure what this is exactly.
+    // Determine if vit needs to be declared as a global within eslint and re-enable this rule.
+    //eslint-disable-next-line no-undef
     vit.load({
       modal: true,
       officialOnly: false,
@@ -82,7 +88,7 @@ class IndividualActivity extends Component {
         'header': '#229acd',
         'landscapeBackgroundHeader': '#228a9d'
       },
-      language: 'en',
+      language: 'en'
     });
   }
 
@@ -92,19 +98,24 @@ class IndividualActivity extends Component {
       browserHistory.push('/');
     } else {
 
-      switch(activityData.acf.special_content) {
-      case 'findrep':
-        this.props.lookForReps(activityData);
-        browserHistory.push('/find-representative');
-      case 'elections':
-        // do something
-      default:
+      switch (activityData.acf.special_content) {
+        case 'findrep':
+          this.props.lookForReps(activityData);
+          browserHistory.push('/find-representative');
+          break;
+        case 'elections':
+          // do something
+          break;
+        default:
         // do something by default
       }
     }
   }
 
   render() {
+
+    // Determine if there isn't a better way to set the ActivityData Title. Perhaps a new component?
+    /*eslint-disable react/no-danger*/
     return (
       <TableRow
         key={this.props.ActivityData.id}
@@ -113,24 +124,24 @@ class IndividualActivity extends Component {
         <TableRowColumn style={this.state.bodyStyle.btnCol}>
           <RaisedButton
             label={this.state.addBtnLabel}
-            default={true}
+            default
             onClick={() => this.addActivity(this.props.ActivityData)}
           />
         </TableRowColumn>
         <TableRowColumn style={this.state.bodyStyle.ActivityTitleCell}>
-          <h3 dangerouslySetInnerHTML={{ __html: this.props.ActivityData.title.rendered}}></h3>
+          <h3 dangerouslySetInnerHTML={{__html: this.props.ActivityData.title.rendered}}/>
           <Dialog
             actions={this.state.closeBtn}
-            modal={true}
+            modal
             open={this.state.open}
           >
             <h3
               style={this.state.bodyStyle.whiteText}
-              dangerouslySetInnerHTML={{ __html: this.props.ActivityData.title.rendered}}>
+              dangerouslySetInnerHTML={{__html: this.props.ActivityData.title.rendered}}>
             </h3>
             <span
               style={this.state.bodyStyle.whiteText}
-              dangerouslySetInnerHTML={{ __html: this.props.ActivityData.content.rendered}}>
+              dangerouslySetInnerHTML={{__html: this.props.ActivityData.content.rendered}}>
             </span>
           </Dialog>
         </TableRowColumn>
@@ -146,7 +157,12 @@ function mapStateToProps(state) {
   return {
     activity: state.userActivities.activity,
     userActivities: state.userActivities
-  }
+  };
 }
 
-export default connect(mapStateToProps, { addUserActivity, lookForReps })(IndividualActivity);
+IndividualActivity.propTypes = {
+  ActivityData: PropTypes.object.isRequired,
+  lookForReps: PropTypes.func.isRequired,
+  addUserActivity: PropTypes.func.isRequired
+};
+export default connect(mapStateToProps, {addUserActivity, lookForReps})(IndividualActivity);

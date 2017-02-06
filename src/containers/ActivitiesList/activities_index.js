@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { FlatButton, Toolbar, ToolbarGroup, ToolbarTitle, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
 import { connect } from 'react-redux';
@@ -7,7 +7,6 @@ import DateSelect from '../../components/DateSelect/dateSelect';
 import TimeSelect from '../../components/TimeSelect/timeSelect';
 import TimeCommitmentSelect from '../../components/TimeCommitmentSelect/timeCommitmentSelect';
 import UserSelectedRepList from '../../components/UserSelectedRepList/userSelectedRepList';
-import moment from 'moment';
 import { fetchUserActivities, deleteUserActivities } from '../../actions/index';
 import CalendarImport from '../../components/CalendarImport/calendarImport';
 
@@ -15,13 +14,13 @@ const tableCellProps = {
   whiteSpace: 'inherit',
   textOverflow: 'inherit',
   width: 'auto'
-}
+};
 
 const activityCellProps = {
   whiteSpace: 'inherit',
   textOverflow: 'inherit',
   width: '50%'
-}
+};
 
 const styles = {
   tableCell: tableCellProps,
@@ -56,7 +55,7 @@ const styles = {
   deleteActionsBtnLabel: {
     fontSize: '10px'
   }
-}
+};
 
 class ActivitiesList extends Component {
   constructor(props) {
@@ -83,7 +82,7 @@ class ActivitiesList extends Component {
         time: 'Time',
         action: 'Action',
         timeCommitment: 'Time Commitment',
-        editAction: 'Edit Action',
+        editAction: 'Edit Action'
       },
       addActionBtnLabel: 'Add An Action',
       deleteActionsBtn: 'Delete Action(s)'
@@ -95,7 +94,7 @@ class ActivitiesList extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       userActivities: nextProps.userActivities
-    })
+    });
   }
 
   handleRowSelection(rows) {
@@ -129,10 +128,9 @@ class ActivitiesList extends Component {
     } else {
       // make input fields go away and refresh the activities...
       this.props.fetchUserActivities(this.state.userActivities);
-      this.state.userActivities = [];
       this.setState({
         indexOfEditedRow: null,
-        userActivities: this.state.userActivities,
+        userActivities: this.state.userActivities || []
       }, () => this.handleRowSelection('none'));
     }
   }
@@ -162,9 +160,13 @@ class ActivitiesList extends Component {
     return this.state.userActivities.map((activity, key) => {
       if (!activity.hasOwnProperty('isInEditMode')) {
         _.merge(activity, {
-          isInEditMode: false,
+          isInEditMode: false
         });
       }
+
+      //Consider if setting the title by injecting HTML is the best way to this. Maybe create another component instead?
+      // Also, is there a way that `key` can be obtained with out binding directly in the render?
+      /*eslint-disable react/no-danger, react/jsx-no-bind */
 
       return (
         <TableRow
@@ -211,8 +213,8 @@ class ActivitiesList extends Component {
     });
   }
 
-  render () {
-    return(
+  render() {
+    return (
       <div>
         <Toolbar style={this.state.bodyStyle.tableToolbar}>
           <ToolbarGroup>
@@ -230,10 +232,10 @@ class ActivitiesList extends Component {
           <ToolbarGroup>
             <RaisedButton
               label={this.state.deleteActionsBtn}
-              default={true}
+              default
               labelStyle={this.state.bodyStyle.deleteActionsBtnLabel}
               onClick={() => {
-                this.deleteActivities(this.state.selectedActivities)
+                this.deleteActivities(this.state.selectedActivities);
               }}
               type="button"
             />
@@ -243,7 +245,7 @@ class ActivitiesList extends Component {
               className="btn btn-primary">
               <RaisedButton
                 label={this.state.addActionBtnLabel}
-                primary={true}
+                primary
               />
             </Link>
           </ToolbarGroup>
@@ -257,11 +259,11 @@ class ActivitiesList extends Component {
           multiSelectable={this.state.multiSelectable}
           onRowSelection={this.handleRowSelection}
         >
-        <TableHeader
-          displaySelectAll={this.state.showCheckboxes}
-          adjustForCheckbox={this.state.showCheckboxes}
-          enableSelectAll={this.state.enableSelectAll}
-        >
+          <TableHeader
+            displaySelectAll={this.state.showCheckboxes}
+            adjustForCheckbox={this.state.showCheckboxes}
+            enableSelectAll={this.state.enableSelectAll}
+          >
             <TableRow>
               <TableHeaderColumn style={this.state.bodyStyle.tableCell}>
                 {this.state.tableHeader.date}
@@ -293,7 +295,7 @@ class ActivitiesList extends Component {
           <Link to="/actions/new" className="btn btn-primary">
             <RaisedButton
               label={this.state.addActionBtnLabel}
-              primary={true}
+              primary
             />
           </Link>
         </div>
@@ -305,7 +307,12 @@ class ActivitiesList extends Component {
 function mapStateToProps(state) {
   return {
     userActivities: state.userActivities.all
-  }
+  };
 }
 
-export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);
+ActivitiesList.propTypes = {
+  deleteUserActivities: PropTypes.func.isRequired,
+  fetchUserActivities: PropTypes.func.isRequired,
+  userActivities: PropTypes.array.isRequired
+};
+export default connect(mapStateToProps, {fetchUserActivities, deleteUserActivities})(ActivitiesList);
