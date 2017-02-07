@@ -8,27 +8,28 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [{
+    rules: [
+      {
         exclude: /node_modules/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-1']
         }
       }, {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: ["style-loader", "css-loader"]
       }, {
         include: /\.json$/,
-        loaders: ['json-loader']
+        loader: ['json-loader']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
-        loader: require.resolve("file-loader") + "?name=../[path][name].[ext]"
+        loader: "file-loader?name=../[path][name].[ext]"
       }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     historyApiFallback: true,
