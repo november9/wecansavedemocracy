@@ -157,6 +157,7 @@ export function getOfficialPhoneNumbers (phoneNumbers) {
   return phoneNumList;
 }
 
+
 export function renderOfficialPhoneNumbers (phoneNumbers) {
     return getOfficialPhoneNumbers(phoneNumbers).map((number, key) => {
     return (

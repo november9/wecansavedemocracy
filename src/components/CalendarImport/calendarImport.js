@@ -8,6 +8,7 @@ import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
 import CalendarPickerButtons from '../CalendarPickerButtons/calendarPickerButtons';
+import { getChannels, getUrls, getOfficialPhoneNumbers } from '../../containers/FindRep/renderRepData';
 
 const styles = {
   calendarDialog: {
@@ -54,9 +55,52 @@ class CalendarImport extends Component {
     }
   }
 
+  renderListsAsString(list, isListOfObjects) {
+
+    let listAsString = '';
+
+    // if the list is an array of key/val pairs, combine the key/vals
+    // into a multi-line string
+    if (isListOfObjects) {
+      list.forEach((val) => {
+        listAsString += (val.type + ': ' + val.id + '\n');
+      });
+    } else {
+      // ...otherwise, just combine the array into a multi-line string
+      listAsString = list.join('\n');
+    }
+
+    return listAsString;
+  }
+
+  generateRepListString(userActivity) {
+    let repListStringArr = [];
+
+    if (userActivity.hasOwnProperty('filteredRepData') && Array.isArray(userActivity.filteredRepData)) {
+      repListStringArr = userActivity.filteredRepData.map((val) => {
+        const numbersArr = getOfficialPhoneNumbers(val.officialPhones);
+        const urlArr = getUrls(val.officialUrls);
+        const channelArr = getChannels(val.officialChannels)
+
+        return val.officialName + '\n' +
+        val.officialTitle + '\n' +
+        this.renderListsAsString(numbersArr) + '\n' +
+        // vals below might be a bit much for just a calendar description, URL to calendar export could
+        // get really long, probably just include a link to their activity list for the
+        // full 411 on each indiv rep
+
+        //val.officialParty + '\n' +
+        //this.renderListsAsString(urlArr) + '\n' +
+        //this.renderListsAsString(channelArr, true) +
+        '------------------\n';
+      });
+    }
+
+    return repListStringArr.join('');
+  }
+
   generateCalendarEventQueryStr(userActivity) {
     let isAllDayEvent = false;
-
     let streetAddressProperties = [
       userActivity.acf.street_address_1,
       userActivity.acf.street_address_2,
@@ -99,11 +143,13 @@ class CalendarImport extends Component {
       }
     }
 
+
     const descNoHtml = striptags(userActivity.content.rendered);
     const descAddSpaceBetweenParagraph = descNoHtml.replace(/\./g,'. ');
+    const descWithRepData = descAddSpaceBetweenParagraph + this.generateRepListString(userActivity);
 
     const title = encodeURIComponent(userActivity.title.rendered).replace(/%20/g, '+');
-    const description = encodeURIComponent(descAddSpaceBetweenParagraph).replace(/%20/g, '+');
+    const description = encodeURIComponent(descWithRepData).replace(/%20/g, '+');
     const location = encodeURIComponent(generateStringVal(streetAddressProperties)).replace(/%20/g, '+');
     const timezone = encodeURIComponent(userActivity.acf.timezone);
     const start_date = encodeURIComponent(getStartDateTime());
@@ -203,6 +249,7 @@ function mapStateToProps(state) {
     calendar: state.calendar
   };
 }
+
 CalendarImport.propTypes = {
   calendar: PropTypes.any,
   userActivities: PropTypes.any,
