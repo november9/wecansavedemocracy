@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { RepInfoDisplay, getChannels, renderChannels, getUrls, renderUrls, getOfficialAddresses, renderOfficialAddresses, renderOfficialTitle, getOfficialPhoneNumbers, renderOfficialPhoneNumbers, colors } from './renderRepData';
+import { RepInfoDisplay, getChannels, renderChannels, getUrls, renderUrls, getOfficialAddresses, renderOfficialAddresses, getEmailAddressList, renderOfficialTitle, getOfficialPhoneNumbers, renderOfficialPhoneNumbers, colors } from './renderRepData';
 
 const style = {
   officialName: {
@@ -219,6 +219,7 @@ class FindRep extends Component {
         officialAddresses: getOfficialAddresses(val.address),
         officialPhones: getOfficialPhoneNumbers(val.phones),
         officialParty: val.party,
+        officialEmails: getEmailAddressList(val.emails),
         officialUrls: val.urls,
         officialChannels: getChannels(val.channels)
       };

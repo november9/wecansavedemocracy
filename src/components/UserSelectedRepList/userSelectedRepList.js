@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { RepInfoDisplay, renderChannels, renderUrls, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from '../../containers/FindRep/renderRepData';
+import { RepInfoDisplay, renderChannels, renderUrls, renderEmailAddressList, renderOfficialAddresses, renderOfficialTitle, renderOfficialPhoneNumbers, colors } from '../../containers/FindRep/renderRepData';
 
 const styles = {
   officialName: {
@@ -37,6 +37,7 @@ class UserSelectedRepList extends Component {
           <div>{rep.officialTitle}</div>
           {renderOfficialPhoneNumbers(rep.officialPhones)}
           Party: <strong>{rep.officialParty}</strong>
+          {renderEmailAddressList(rep.officialEmails)}
           {renderUrls(rep.officialUrls)}
           {renderChannels(rep.officialChannels)}
         </li>
