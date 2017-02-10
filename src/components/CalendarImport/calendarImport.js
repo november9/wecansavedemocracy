@@ -8,7 +8,7 @@ import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';
 import CalendarPickerButtons from '../CalendarPickerButtons/calendarPickerButtons';
-import { getChannels, getUrls, getOfficialPhoneNumbers } from '../../containers/FindRep/renderRepData';
+import { getChannels, getUrls, getOfficialPhoneNumbers, getEmailAddressList } from '../../containers/FindRep/renderRepData';
 
 const styles = {
   calendarDialog: {
@@ -55,23 +55,28 @@ class CalendarImport extends Component {
     }
   }
 
-  renderListsAsString(list, isListOfObjects) {
+  renderListsAsString(list, isListOfObjects, addNewLine) {
+      let listAsString = '';
+      // if the list is an array of key/val pairs, combine the key/vals
+      // into a multi-line string
+      if (list) {
+        if (isListOfObjects) {
+          list.forEach((val) => {
+            listAsString += (val.type + ': ' + val.id + '\n');
+          });
+        } else {
+          // ...otherwise, just combine the array into a multi-line string
+          listAsString = list.join('\n');
+        }
 
-    let listAsString = '';
+        if (addNewLine) {
+          listAsString += '\n';
+        }
 
-    // if the list is an array of key/val pairs, combine the key/vals
-    // into a multi-line string
-    if (isListOfObjects) {
-      list.forEach((val) => {
-        listAsString += (val.type + ': ' + val.id + '\n');
-      });
-    } else {
-      // ...otherwise, just combine the array into a multi-line string
-      listAsString = list.join('\n');
+      }
+
+      return listAsString;
     }
-
-    return listAsString;
-  }
 
   generateRepListString(userActivity) {
     let repListStringArr = [];
@@ -80,11 +85,13 @@ class CalendarImport extends Component {
       repListStringArr = userActivity.filteredRepData.map((val) => {
         const numbersArr = getOfficialPhoneNumbers(val.officialPhones);
         const urlArr = getUrls(val.officialUrls);
-        const channelArr = getChannels(val.officialChannels)
+        const channelArr = getChannels(val.officialChannels);
+        const emailAddressArr = getEmailAddressList(val.officialEmails);
 
         return val.officialName + '\n' +
         val.officialTitle + '\n' +
         this.renderListsAsString(numbersArr) + '\n' +
+        this.renderListsAsString(emailAddressArr, false, true)
         // vals below might be a bit much for just a calendar description, URL to calendar export could
         // get really long, probably just include a link to their activity list for the
         // full 411 on each indiv rep
@@ -92,7 +99,7 @@ class CalendarImport extends Component {
         //val.officialParty + '\n' +
         //this.renderListsAsString(urlArr) + '\n' +
         //this.renderListsAsString(channelArr, true) +
-        '------------------\n';
+        + '------------------\n';
       });
     }
 

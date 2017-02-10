@@ -79,11 +79,37 @@ export function getUrls(urls) {
   if (urls) {
     let urlList = [];
 
-    urlList = urls.map((url, key) => {
+    urlList = urls.map((url) => {
       return url;
     });
 
     return urlList;
+  }
+}
+
+export function getEmailAddressList(emails) {
+  if (emails) {
+    let emailAddresses = [];
+
+    emailAddresses = emails.map((email) => {
+      return email;
+    });
+
+    return emailAddresses;
+  }
+}
+
+export function renderEmailAddressList(emails) {
+  if (emails) {
+    return getEmailAddressList(emails).map((email, key) => {
+      return (
+        <div key={key}>
+          <a
+            href={email}
+            style={style.hyperLinks}>{email}</a>
+        </div>
+      );
+    });
   }
 }
 
@@ -173,7 +199,11 @@ export class RepInfoDisplay extends Component {
     super(props);
   }
 
+
   render () {
+    console.log('this.props.repData', this.props.repData);
+
+
     return (
       <div>
         <h3 style={style.officialName}>{this.props.repData.name}</h3>
@@ -181,6 +211,7 @@ export class RepInfoDisplay extends Component {
         {renderOfficialAddresses(this.props.repData.address)}
         {renderOfficialPhoneNumbers(this.props.repData.phones)}
         Party: <strong>{this.props.repData.party}</strong>
+        {renderEmailAddressList(this.props.repData.emails)}
         {renderUrls(this.props.repData.urls)}
         {renderChannels(this.props.repData.channels)}
       </div>
