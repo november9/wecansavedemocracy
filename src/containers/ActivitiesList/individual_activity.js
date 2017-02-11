@@ -62,16 +62,14 @@ class IndividualActivity extends Component {
       open: false,
       contactModalText: 'Find Your Local Representative',
       closeBtn
-    };
-
-    this.addActivity = this.addActivity.bind(this);
+    }
   }
 
-  handleOpen() {
+  handleOpen = () => {
     this.setState({open: true});
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({open: false});
   }
 

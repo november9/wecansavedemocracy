@@ -44,14 +44,14 @@ class DateSelect extends Component {
     });
   }
 
-  handleDateChange (event, date) {
+  handleDateChange = (event, date) => {
     this.props.activities[this.state.indexOfSelectedRow].acf.date = moment(date).format('YYYYMMDD');
 
     this.setState({
       startDate: date,
       minDate: this.state.minDate
     });
-  }
+  };
 
   render() {
     let startDate;

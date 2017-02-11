@@ -40,7 +40,7 @@ class TimeSelect extends Component {
     }
   }
 
-  handleChangeTimepicker12(event, date) {
+  handleChangeTimepicker12 = (event, date) => {
     // break new time down into pieces to correspond with activity object from API
     const hours = date.getHours();
     const convertedHours = ((hours + 11) % 12 + 1);
