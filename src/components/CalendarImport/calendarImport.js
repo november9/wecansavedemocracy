@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { RaisedButton, Dialog } from 'material-ui';
 import { createCalendar, createEvent, fetchCalendarEvents, deleteEvent } from '../../actions/index';
 import { connect } from 'react-redux';
-import addLeadingZeros from '../../utils/addLeadingZeros';
 import convertHtmlSymbols from '../../utils/convertHtmlSymbols';
 import moment from 'moment';
 import striptags from 'striptags';

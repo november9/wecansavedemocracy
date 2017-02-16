@@ -127,11 +127,12 @@ class ActivitiesList extends Component {
       });
     } else {
       // make input fields go away and refresh the activities...
-      this.props.fetchUserActivities(this.state.userActivities);
       this.setState({
         indexOfEditedRow: null,
-        userActivities: this.state.userActivities || []
-      }, () => this.handleRowSelection('none'));
+        userActivities: this.props.fetchUserActivities(this.state.userActivities) || []
+      }, () => {
+        this.handleRowSelection('none');
+      });
     }
   }
 
@@ -315,4 +316,4 @@ ActivitiesList.propTypes = {
   fetchUserActivities: PropTypes.func.isRequired,
   userActivities: PropTypes.array.isRequired
 };
-export default connect(mapStateToProps, {fetchUserActivities, deleteUserActivities})(ActivitiesList);
+export default connect(mapStateToProps, { fetchUserActivities, deleteUserActivities })(ActivitiesList);

@@ -23,21 +23,12 @@ class TimeSelect extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     this.setState({
       indexOfSelectedRow: nextProps.indexOfSelectedRow,
       indexOfEditedRow: nextProps.indexOfEditedRow,
       activities: nextProps.activities,
-      customFields: nextProps.activities[nextProps.indexOfSelectedRow].acf
+      customFields: nextProps.activities[nextProps.indexOfSelectedRow].acf,
     });
-  }
-
-  addLeadingZeros(num) {
-    if (num < 9) {
-      return '0' + num;
-    } else {
-      return num;
-    }
   }
 
   handleChangeTimepicker12 = (event, date) => {
@@ -57,7 +48,7 @@ class TimeSelect extends Component {
     this.setState({startTime: date});
   }
 
-  render() {
+  renderTimePicker() {
     const customFields = this.props.activities[this.props.indexOfSelectedRow].acf;
     let startTime;
 
@@ -71,7 +62,7 @@ class TimeSelect extends Component {
 
       startTime =
         customFields.start_hour + ':' +
-        customFields.start_minute + ' ' +
+        (customFields.start_minute) + ' ' +
         customFields.start_am_pm;
     }
 
@@ -102,9 +93,13 @@ class TimeSelect extends Component {
           );
         } else {
           // ...otherwise, just grab what's in the API
+          const startTimeSplit = startTime.split(':');
+          const minsWithLeadingZeros = addLeadingZeros(startTimeSplit[1]);
+          const formattedStartTime = startTimeSplit[0] + ':' + minsWithLeadingZeros;
+
           return (
             <span>
-              {startTime}
+              {formattedStartTime}
             </span>
           );
         }
@@ -117,8 +112,15 @@ class TimeSelect extends Component {
           </span>
         );
       }
-
     }
+  }
+
+  render() {
+    return (
+      <div>
+        {this.renderTimePicker()}
+      </div>
+    )
   }
 }
 

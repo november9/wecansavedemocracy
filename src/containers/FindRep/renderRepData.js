@@ -201,9 +201,6 @@ export class RepInfoDisplay extends Component {
 
 
   render () {
-    console.log('this.props.repData', this.props.repData);
-
-
     return (
       <div>
         <h3 style={style.officialName}>{this.props.repData.name}</h3>
