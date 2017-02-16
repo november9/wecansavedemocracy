@@ -1,5 +1,7 @@
 const addLeadingZeros = (num) => {
-  if (num < 9) {
+  const parsedAsNum = parseInt(num);
+
+  if (num <= parsedAsNum) {
     return '0' + num;
   } else {
     return num;

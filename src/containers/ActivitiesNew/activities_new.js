@@ -10,7 +10,7 @@ import {CircularProgress, GridList, GridTile, Card, CardTitle, CardText, Checkbo
 import { connect } from 'react-redux';
 import { fetchCauses, fetchActivities, fetchActivity } from '../../actions/index';
 import { Link } from 'react-router';
-import IndividualActivity from '../ActivitiesList/individual_activity';
+import IndividualActivity from './individual_activity';
 
 let selectedCauses = [];
 let selectedActivities = [];
