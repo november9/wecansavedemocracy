@@ -32,3 +32,13 @@ Once you've cloned the repo from your fork, install dependencies, then start the
 	> npm install
 	> npm start
 ```
+or
+```
+	> git clone git@github.com:november9/wecansavedemocracy.git
+	> cd wecansavedemocracy
+	> yarn
+	> yarn start
+```
+
+Please use `yarn` when adding new modules so that the lock file gets updated properly.
+
