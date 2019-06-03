@@ -26,7 +26,7 @@ const FILTER = '?per_page=100';
 const GOOGLE_CIVIC_API_ROOT_URL = 'https://www.googleapis.com/civicinfo/v2';
 const GOOGLE_API_KEY = 'AIzaSyDzR0SxrSr1f-vrp0yPWVaDPqs1jx_lT5I';
 const ADD_EVENT_ROOT_URL = 'https://www.addevent.com/api/v1/me/calendars';
-const ADD_EVENT_API_KEY = 'ae.api25252_1484952331j2gGSe8pLxho';
+const ADD_EVENT_API_KEY = 'KEY';
 
 export function fetchActivities() {
   const request = axios.get(`${ROOT_URL}/actions`);
