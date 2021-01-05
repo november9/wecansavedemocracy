@@ -43,7 +43,7 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.21.1",
     "babel-preset-stage-1": "^6.1.18",
     "css-loader": "^0.26.1",
     "file-loader": "^0.10.0",
