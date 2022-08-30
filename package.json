@@ -52,7 +52,7 @@
     "material-design-icons": "^3.0.1",
     "material-ui": "^0.16.7",
     "moment": "^2.17.1",
-    "moment-timezone": "^0.5.11",
+    "moment-timezone": "^0.5.35",
     "react-dom": "^15.4.1",
     "react-moment": "^0.1.2",
     "react-redux": "^4.0.0",
